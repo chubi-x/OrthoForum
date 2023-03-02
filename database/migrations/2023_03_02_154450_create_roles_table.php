@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('moderators', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            //polymorphic one to one with user
-
-            // one to many relationship with rooms
+            // a normal user can either be a moderator or a member
+            $table->enum("type",["MODERATOR","MEMBER"]);
+            // one to many relationship with user
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('moderators');
+        Schema::dropIfExists('roles');
     }
 };
