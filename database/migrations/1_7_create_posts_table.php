@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->longText("text");
             $table->bigInteger("member_id")->unsigned();
+            $table->foreignId('room_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             // $table->string("image_paths");  //serialized array of post image paths
             $table->timestamps();
 
