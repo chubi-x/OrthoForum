@@ -10,6 +10,9 @@ class Comment extends Model
 {
     use HasFactory;
     public function member():BelongsTo{
-        return $this->belongsTo(Member::class);
+        return $this->belongsTo(Member::class); //$comment->member()->associate($member) to associate member
+    }
+    public function post():BelongsTo{
+        return $this->belongsTo(Post::class);
     }
 }
