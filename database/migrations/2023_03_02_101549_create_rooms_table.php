@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string("name")->unique();
             $table->string("description");
+            $table->enum("type", ["PRIVATE", "PUBLIC"]);  //only members can post to private rooms
             // $table->string("banner_image_path");
-
+            // one to one polymorphic relationship with image to return banner
             $table->timestamps();
         });
     }
