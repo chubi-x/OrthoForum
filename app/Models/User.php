@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class User extends Model
 {
     use HasFactory;
-    protected $fillable = ['fullname','username','email','password','isAdmin'];
+    protected $fillable = ['fullname','username','email','password'];
 
     // get user profile pic
     public function profile_pic():MorphOne{
