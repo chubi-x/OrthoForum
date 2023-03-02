@@ -14,11 +14,14 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->longText("text");
-            $table->bigInteger("member_id");
+            $table->bigInteger("member_id")->unsigned();
+            $table->bigInteger("post_id")->unsigned();
             $table->timestamps();
 
-            $table->foreign("member_id")->references("id")->on("member")
+            $table->foreign("member_id")->references("id")->on("members")
                 ->restrictOnDelete()->cascadeOnUpdate();
+            $table->foreign("post_id")->references("id")->on("members")
+                ->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 
