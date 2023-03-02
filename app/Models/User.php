@@ -24,6 +24,6 @@ class User extends Model
 
     // user can be member and moderator
     public function roles():BelongsToMany{
-        return $this->belongsToMany(Roles::class)->withTimestamps();
+        return $this->belongsToMany(Role::class)->withTimestamps(); //$user->roles to return all user roles
     }
 }
