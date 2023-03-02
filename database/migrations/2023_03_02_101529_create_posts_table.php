@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('posts', function (Blueprint $table) {
-            $table->uuid("id");
+            $table->id();
             $table->longText("text");
             // $table->string("image_paths");  //serialized array of post image paths
             $table->timestamps();
