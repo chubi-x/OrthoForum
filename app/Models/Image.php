@@ -10,6 +10,7 @@ class Image extends Model
 {
     use HasFactory;
     public function imageable():MorphTo{
-        return $this->morphTo(); //single image model has one-to-one relationship with User and Room model
+        return $this->morphTo(); //single image model has one-to-one relationship with User and Room model and many to many wITH Post
     }
+
 }
