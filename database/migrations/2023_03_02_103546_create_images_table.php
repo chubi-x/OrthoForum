@@ -14,8 +14,12 @@ return new class extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->uuid("id");
             $table->string("path");
-            $table->timestamps();
             // could belong to user, post, or room
+            $table->string("imageable_id"); //returns the id of either User,Post, or Room
+            $table->string("imageable_type"); //returns the column name of either User,Post, or Room
+
+            $table->timestamps();
+
         });
     }
 
