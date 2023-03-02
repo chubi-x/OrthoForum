@@ -14,7 +14,11 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->longText("text");
+            $table->bigInteger("member_id");
             $table->timestamps();
+
+            $table->foreign("member_id")->references("id")->on("member")
+                ->restrictOnDelete()->cascadeOnUpdate();
         });
     }
 
