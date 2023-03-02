@@ -13,7 +13,7 @@ class Member extends Model
     use HasFactory;
     // polymorphic one to one relationship with users
      public function user():MorphOne{
-        return $this->morphOne(User::class, "userable");
+        return $this->morphOne(User::class, "userable");  //$member->user()->save($user) to save user
     }
     // members have many rooms
     public function rooms():BelongsToMany{
@@ -26,4 +26,9 @@ class Member extends Model
                 return $this->hasMany(Comment::class);
 
     }
+    //  fullname: "chubi adejoh",
+    // username: "chubix",
+    // email: "chubix@gmail.com",
+    // password: "124",
+    // isAdmin: false,
 }
