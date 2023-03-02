@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string("username")->unique();
             $table->string("email")->unique();
             $table->string("password");
+            $table->boolean("isAdmin");
             // add polymorphic many to many for different kinds of users
             // three user types: admin, moderator, and member
             $table->morphs("userable");
