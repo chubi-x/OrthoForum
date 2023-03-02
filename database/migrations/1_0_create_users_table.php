@@ -20,7 +20,7 @@ return new class extends Migration
             $table->boolean("isAdmin");
             // add polymorphic many to many for different kinds of users
             // three user types: admin, moderator, and member
-            $table->morphs("userable");
+            $table->nullableMorphs("userable");
             //if user creates room, we add them to moderator table
             $table->timestamps();
         });
