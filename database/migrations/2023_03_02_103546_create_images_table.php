@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string("path");
             // could belong to user, post, or room
-            $table->string("imageable_id"); //returns the id of either User,Post, or Room
-            $table->string("imageable_type"); //returns the column name of either User,Post, or Room
-
+            // polymorphic one-to-one relationship for User and Room
+            $table->morphs("imageable");
             $table->timestamps();
 
         });
