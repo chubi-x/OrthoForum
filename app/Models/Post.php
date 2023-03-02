@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class Post extends Model
 {
     use HasFactory;
-    public function user():BelongsTo{
+    public function member():BelongsTo{
         return $this->belongsTo(Member::class);
     }
     public function images():MorphMany{
@@ -19,5 +19,8 @@ class Post extends Model
     }
     public function comments():HasMany{
         return $this->hasMany(Comment::class);
+    }
+    public function room():BelongsTo{
+        return $this->belongsTo(Room::class);
     }
 }

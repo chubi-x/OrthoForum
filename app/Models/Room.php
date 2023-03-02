@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Room extends Model
@@ -20,5 +21,8 @@ class Room extends Model
     }
     public function moderator():BelongsTo{
         return $this->belongsTo(Moderator::class);
+    }
+    public function posts():HasMany{
+        return $this->hasMany(Post::class);
     }
 }
