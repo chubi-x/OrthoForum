@@ -9,8 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Role extends Model
 {
     use HasFactory;
+        protected $fillable = ['type',];
+
     // role can be assigned to many users
     public function users():BelongsToMany{
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class); //$user->roles()->attach($roleId);
     }
 }
