@@ -17,13 +17,13 @@ class User extends Model
     public function profile_pic():MorphOne{
         return $this->morphOne(Image::class,"imageable"); // $user->profile_pic()->save($image) to save the profile pic
     }
-    // one to one polymorphic relationship with Member and Moderator
+    // one to one polymorphic relationship with Member and Admin
     public function userable():MorphTo{
         return $this->morphTo();
     }
 
-    // user can be member and moderator
-    public function roles():BelongsToMany{
-        return $this->belongsToMany(Role::class)->withTimestamps(); //$user->roles to return all user roles
-    }
+    // // user can be member and moderator
+    // public function roles():BelongsToMany{
+    //     return $this->belongsToMany(Role::class)->withTimestamps(); //$user->roles to return all user roles
+    // }
 }
