@@ -20,7 +20,7 @@ return new class extends Migration
 
             $table->foreign("member_id")->references("id")->on("members")
                 ->restrictOnDelete()->cascadeOnUpdate();
-            $table->foreign("post_id")->references("id")->on("members")
+            $table->foreign("post_id")->references("id")->on("posts")
                 ->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
