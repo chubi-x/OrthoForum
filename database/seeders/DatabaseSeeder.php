@@ -12,13 +12,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(MemberTableSeeder::class);
+        // $this->call(MemberTableSeeder::class);
         $this->call(UserTableSeeder::class);
 
         // SEEDING ORDER
             // SEED MEMBERS
             // SEED ADMIN
-            // SEED USER
+            // SEED USER  ------->> (DONE)
                 // create member or admin (randomize it) and save
                 // populate fields and save
                 //assign user to member or admin
