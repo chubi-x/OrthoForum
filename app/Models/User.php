@@ -22,8 +22,4 @@ class User extends Model
         return $this->morphTo();
     }
 
-    // // user can be member and moderator
-    // public function roles():BelongsToMany{
-    //     return $this->belongsToMany(Role::class)->withTimestamps(); //$user->roles to return all user roles
-    // }
 }
