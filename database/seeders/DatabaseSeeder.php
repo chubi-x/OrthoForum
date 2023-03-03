@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UserTableSeeder::class);
         $this->call(ModeratorTableSeeder::class);
         $this->call(RoomTableSeeder::class);
+        $this->call(PostTableSeeder::class);
 
         // SEEDING ORDER
             // SEED MEMBERS
