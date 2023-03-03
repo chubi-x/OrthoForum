@@ -12,8 +12,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call(MemberTableSeeder::class);
         $this->call(UserTableSeeder::class);
+        $this->call(ModeratorTableSeeder::class);
 
         // SEEDING ORDER
             // SEED MEMBERS
@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
                 // populate fields and save
                 //assign user to member or admin
 
-            // SEED MODERATOR
+            // SEED MODERATOR ---> (DONE)
                 // associate moderator to random member
 
             //SEED ROOMS
