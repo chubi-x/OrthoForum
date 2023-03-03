@@ -14,6 +14,11 @@ class ModeratorTableSeeder extends Seeder
      */
     public function run(): void
     {
-        Moderator::factory()->forMember()->create();
+        // assign moderator to 4 members
+        $members = Member::all()->random(4);
+        foreach ($members as $member){
+
+            Moderator::factory()->for($member)->create();
+        }
     }
 }
