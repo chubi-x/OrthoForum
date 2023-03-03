@@ -14,13 +14,11 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->longText("text");
-            $table->bigInteger("member_id")->unsigned();
+            $table->foreignId("member_id")->constrained()->restrictOnDelete()->cascadeOnUpdate();
             $table->foreignId('room_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             // $table->string("image_paths");  //serialized array of post image paths
             $table->timestamps();
 
-            $table->foreign("member_id")->references("id")->on("members")
-                ->restrictOnDelete()->cascadeOnUpdate();
         });
     }
 

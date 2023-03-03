@@ -16,10 +16,7 @@ return new class extends Migration
             $table->string("name")->unique();
             $table->string("description");
             $table->enum("type", ["PRIVATE", "PUBLIC"]);
-            $table->bigInteger("moderator_id")->unsigned(); //only members can post to private rooms
-            // one to one polymorphic relationship with image to return banner
-            $table->foreign("moderator_id")->references("id")->on("moderators")
-                ->restrictOnDelete()->cascadeOnUpdate();
+            $table->foreignId("moderator_id")->constrained()->restrictOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }
