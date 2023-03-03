@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(UserTableSeeder::class);
         $this->call(ModeratorTableSeeder::class);
+        $this->call(RoomTableSeeder::class);
 
         // SEEDING ORDER
             // SEED MEMBERS
@@ -26,7 +27,7 @@ class DatabaseSeeder extends Seeder
             // SEED MODERATOR ---> (DONE)
                 // associate moderator to random member
 
-            //SEED ROOMS
+            //SEED ROOMS ---> (DONE)
                 // assign each room to random moderator
                 // add random members to room
 
@@ -36,7 +37,7 @@ class DatabaseSeeder extends Seeder
                 // assign post to random room
 
             // SEED IMAGES
-                // assign each image to random user (avatar) or random post
+                // assign each image to random user (avatar), post or room
 
             //SEED COMMENT
                 //assign comment to random post and random user
