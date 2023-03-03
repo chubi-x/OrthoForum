@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string("path");
             $table->enum("type", ["AVATAR", "POST","BANNER"]);
             // could belong to user, post, or room
-            // polymorphic one-to-one relationship for User and Room
-            $table->morphs("imageable");
+            // polymorphic one-to-one relationship for User, Post, and Room
+            $table->bigInteger("imageable_id")->unique();
+            $table->string("imageable_type");
             $table->timestamps();
 
         });
