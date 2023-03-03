@@ -16,11 +16,13 @@ class UserTableSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->count(10)->state(
-            new Sequence(
-                ["userable_id"=> Member::factory()->createOne()->id, 'userable_type'=> Member::class], //alternate between member and admin for each created user
-                ["userable_id"=> Admin::factory()->createOne()->id, 'userable_type'=> Admin::class]
-            )
+        User::factory()->count(10)->sequence(
+            fn (Sequence $sq)=>[
+                    "userable_id"=> Member::factory()->create()->id, 'userable_type'=> Member::class, //alternate between member and admin for each created user
+                ],
+                fn (Sequence $sq)=>[
+                    "userable_id"=> Admin::factory()->create()->id, 'userable_type'=> Admin::class
+                ],
         )
         ->create();
     }
