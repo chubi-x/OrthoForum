@@ -14,8 +14,8 @@ class User extends Model
     protected $fillable = ['fullname','username','email','password'];
 
     // get user profile pic
-    public function profile_pic():MorphOne{
-        return $this->morphOne(Image::class,"imageable"); // $user->profile_pic()->save($image) to save the profile pic
+    public function avatar():MorphOne{
+        return $this->morphOne(Image::class,"imageable"); // $user->avatar()->save($image) to save the profile pic
     }
     // one to one polymorphic relationship with Member and Admin
     public function userable():MorphTo{

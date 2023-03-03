@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->id();
             $table->string("path");
+            $table->enum("type", ["AVATAR", "POST"]);
             // could belong to user, post, or room
             // polymorphic one-to-one relationship for User and Room
             $table->morphs("imageable");
