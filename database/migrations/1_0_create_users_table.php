@@ -17,12 +17,10 @@ return new class extends Migration
             $table->string("username")->unique();
             $table->string("email")->unique();
             $table->string("password");
-            // $table->boolean("isAdmin");
 
             // add polymorphic many to many for different kinds of users
-            // three user types: admin, moderator, and member
+            // two user types: admin and member
             $table->morphs("userable");
-            //if user creates room, we add them to moderator table
             $table->timestamps();
         });
     }

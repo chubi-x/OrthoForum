@@ -36,9 +36,6 @@ class DatabaseSeeder extends Seeder
                 //assign post to random member
                 // assign post to random room
 
-            // SEED IMAGES
-                // assign each image to random user (avatar), post or room
-
             //SEED COMMENT
                 //assign comment to random post and random user
 
