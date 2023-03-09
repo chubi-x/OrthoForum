@@ -28,9 +28,3 @@ class RoomTableSeeder extends Seeder
         }
     }
 }
-
-// ->create([
-//                 "type"=>"BANNER",
-//                 "imageable_id"=> function(array $at){}  ,
-//                 "imageable_type"=>Room::class
-//             ])

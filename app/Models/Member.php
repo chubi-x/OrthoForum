@@ -30,9 +30,5 @@ class Member extends Model
                 return $this->hasMany(Comment::class);
 
     }
-    //  fullname: "chubi adejoh",
-    // username: "chubix",
-    // email: "chubix@gmail.com",
-    // password: "124",
-    // isAdmin: false,
+
 }

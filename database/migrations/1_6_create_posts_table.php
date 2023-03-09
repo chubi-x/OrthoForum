@@ -16,7 +16,6 @@ return new class extends Migration
             $table->longText("text");
             $table->foreignId("member_id")->constrained()->restrictOnDelete()->cascadeOnUpdate();
             $table->foreignId('room_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            // $table->string("image_paths");  //serialized array of post image paths
             $table->timestamps();
 
         });

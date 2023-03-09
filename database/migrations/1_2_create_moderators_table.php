@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('moderators', function (Blueprint $table) {
             $table->id();
             $table->foreignId("member_id")->unique()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            //polymorphic one to one with user
 
             // one to many relationship with rooms
             $table->timestamps();

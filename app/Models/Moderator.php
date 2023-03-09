@@ -11,9 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Moderator extends Model
 {
     use HasFactory;
-    //  public function user():MorphMany{
-    //     return $this->morphMany(User::class, "userable");
-    // }
+
     public function member():BelongsTo{
         return $this->belongsTo(Member::class);
     }
