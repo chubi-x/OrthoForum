@@ -40,6 +40,9 @@ class UserController extends Controller
         $user = new User;
         foreach ($validatedData as $key => $value){
             $user->$key = $value;
+            if($key == 'password'){
+                $user->$key = hash('sha256', $value);
+            }
         }
         //save user as member;
         $member = new Member;
@@ -54,7 +57,10 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        //show all user posts and comments
+        //show if they're a moderator or not
+        //show avatar
+        //show rooms
     }
 
     /**
