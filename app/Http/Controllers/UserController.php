@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Member;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -19,7 +21,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view("signup");
     }
 
     /**
@@ -27,7 +29,24 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate(
+            [
+                'fullname'=>'required|max:255',
+                'email'=> 'required|unique:users',
+                'password'=>'required',
+                'username'=>'required|unique:users'
+            ]
+        );
+        $user = new User;
+        foreach ($validatedData as $key => $value){
+            $user->$key = $value;
+        }
+        //save user as member;
+        $member = new Member;
+        $member->save();
+        $member->user()->save($user);
+        $user->save();
+        session()->flash("member_signup","Sign Up Successful!");
     }
 
     /**
