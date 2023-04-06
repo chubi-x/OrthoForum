@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,8 @@ Route::get('/', function () {
 Route::get('/signup',[UserController::class, 'create'])->name("user.create");
 Route::post('/users/create',[UserController::class, 'store'])->name("user.store");
 
-//admin signup
-//Route::get('/signup/admin',[AdminController::class, 'create'])->name("admin.create");
-//Route::post('/users/admin/create',[AdminController::class, 'store'])->name("admin.store");
+// list all members
+Route::get('/users',[MemberController::class,'index'])->name("members.index");
+
+//user dashboard
+Route::get('/users/{id}',[UserController::class, 'show']);

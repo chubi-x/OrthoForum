@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
@@ -11,7 +12,9 @@ class MemberController extends Controller
      */
     public function index()
     {
-        //
+        //show fullname and username
+        $members = User::all()->where("userable_type","App\Models\Member");
+        return view("members.index",['members'=>$members]);
     }
 
     /**
