@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->longText("text");
+            $table->bigInteger("likes")->default(0);
             $table->foreignId("member_id")->constrained()->restrictOnDelete()->cascadeOnUpdate();
             $table->foreignId('room_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
