@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string("username")->unique();
             $table->string("email")->unique();
             $table->string("password");
-            $table->string("remember_token")->nullable();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->rememberToken();
 
             // add polymorphic many to many for different kinds of users
             // two user types: admin and member
