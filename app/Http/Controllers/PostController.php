@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Member;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -43,7 +45,12 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $post = Post::find($id);
+        $author = User::find(Member::find($post->member_id)->user->id)->username;
+//        dd($user);
+        return Inertia::render("Posts/Show",
+            ["post" => $post,"author"=> $author, "comments" => $post->comments]);
+
     }
 
     /**

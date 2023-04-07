@@ -1,5 +1,5 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import {useForm} from "@inertiajs/react";
+import {Link, useForm} from "@inertiajs/react";
 import {Transition} from "@headlessui/react";
 import SecondaryButton from "@/Components/SecondaryButton";
 
@@ -25,7 +25,11 @@ export default function Index({auth,posts}){
                 {
                     posts.map((post) => (
                     <div key={post.id}>
-                        <h2>  {post.text} </h2>
+                        <h2>
+                            <Link href={route('posts.show',[post.id])}>
+                                {post.text}
+                            </Link>
+                        </h2>
                         <SecondaryButton onClick={()=>deleteFunction(post.id)} disabled={processing} className='inline'>
                             Delete Post
                         </SecondaryButton>

@@ -35,6 +35,7 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 //    store post
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
     Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
 });
 
