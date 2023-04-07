@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->longText("text");
+            $table->bigInteger("likes")->default(0);
             $table->foreignId("member_id")->constrained()->restrictOnDelete()->cascadeOnUpdate();
             $table->foreignId("post_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
