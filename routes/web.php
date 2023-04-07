@@ -27,8 +27,7 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Route to create post
-
+// POSTS ROUTES
 Route::middleware(['auth','verified'])->group(function () {
 //    create post view
     Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
@@ -36,6 +35,7 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 //    store post
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
 });
 
 Route::middleware('auth')->group(function () {
