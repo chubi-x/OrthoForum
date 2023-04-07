@@ -2,14 +2,13 @@ import InputLabel from "@/Components/InputLabel";
 import InputError from "@/Components/InputError";
 import {useForm, usePage} from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
-import {Transition} from "@headlessui/react";
 import Textarea from "@/Components/Textarea";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import {useEffect} from "react";
 
 export default function Create() {
     const user = usePage().props.auth.user;
-    const { data, setData, post, errors, processing, recentlySuccessful } = useForm({
+    const { data, setData, post, errors, processing } = useForm({
         text: '',
         userable_id: ''
     });
@@ -45,15 +44,6 @@ export default function Create() {
 
                     <div className="flex items-center gap-4">
                         <PrimaryButton disabled={processing}>Post</PrimaryButton>
-
-                        <Transition
-                            show={recentlySuccessful}
-                            enterFrom="opacity-0"
-                            leaveTo="opacity-0"
-                            className="transition ease-in-out"
-                        >
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
-                        </Transition>
                     </div>
                 </form>
             </div>
