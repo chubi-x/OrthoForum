@@ -1,5 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import {Head, Link} from '@inertiajs/react';
+import PrimaryButton from "@/Components/PrimaryButton";
 
 export default function Dashboard({ auth }) {
     return (
@@ -14,6 +15,12 @@ export default function Dashboard({ auth }) {
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100">You're logged in!</div>
                     </div>
+                    <PrimaryButton>
+                        <Link  href={route("posts.index")}>
+                            Posts
+                        </Link>
+                    </PrimaryButton>
+
                 </div>
             </div>
         </AuthenticatedLayout>
