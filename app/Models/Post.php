@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class Post extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'text'
+    ];
     public function member():BelongsTo{
         return $this->belongsTo(Member::class);
     }

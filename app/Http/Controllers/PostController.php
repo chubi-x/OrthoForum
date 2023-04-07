@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
-class AdminController extends Controller
+class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $posts = Post::all()-> where("member_id", $request->user()->userable_id);
+        return Inertia::render("Posts/Index", ["posts" => $posts]);
     }
 
     /**
@@ -19,7 +23,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render("Posts/Create");
     }
 
     /**
@@ -27,7 +31,11 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $post = new Post;
+        $post->fill($request->all(["text"]));
+        $post->member()->associate($request->all()["userable_id"]);
+        $post->save();
+        return Redirect::route("posts.index");
     }
 
     /**
