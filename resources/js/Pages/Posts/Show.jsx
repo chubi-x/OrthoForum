@@ -31,14 +31,43 @@ export default function Show({auth, post, author, comments}) {
     }
     const newComment = (e) => {
         e.preventDefault()
-        postComment(route('comments.store'),{
-            preserveState: false,
+        postComment(route('comments.store'),);
+    }
+    const deleteComment  = (e,commentId) =>{
+        e.preventDefault();
+        deleteCommentMethod(route('comments.destroy', [commentId]),{
+            preserveState: true,
         });
     }
-    // const deleteComment  = (e,commentId) =>{
-    //     e.preventDefault();
-    //     deleteCommentMethod(route('comments.destroy', [commentId]));
-    // }
+
+    const canModifyPost = () => {
+        let toReturn = null;
+        if(post.member_id === auth.user.userable_id) {
+            toReturn =  (
+                <>
+                    <SecondaryButton onClick={(e) => deletePost(post.id)}
+                                     disabled={processingPost} className='inline'>
+                        Delete Post
+                    </SecondaryButton>
+                    <SecondaryButton onClick={(e) => editPost(post.id)}
+                                     disabled={processingPost} className='inline'>
+                        Edit Post
+                    </SecondaryButton>
+                </>
+            )
+        }
+        else if(
+            auth.user.userable_type === 'App\\Models\\Admin' ||
+            auth.user.userable_type === 'App\\Models\\Moderator'){
+            toReturn =  (
+                    <SecondaryButton onClick={(e) => deletePost(post.id)}
+                                     disabled={processingPost} className='inline'>
+                        Delete Post
+                    </SecondaryButton>
+            )
+        }
+        return toReturn;
+    }
     return (
         <AuthenticatedLayout user={auth.user}>
             <div>
@@ -47,7 +76,7 @@ export default function Show({auth, post, author, comments}) {
                 <div>
                     <h2> Text:  {post.text} </h2>
                     <p>Likes: {post.likes}</p>
-
+                    {canModifyPost()}
                     <h3> {comments.length > 0 ? 'Comments' : 'No Comments'}  </h3>
                     {
                         comments.map((comment) => (
