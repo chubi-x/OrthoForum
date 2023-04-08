@@ -47,9 +47,13 @@ class PostController extends Controller
     {
         $post = Post::find($id);
         $author = User::find(Member::find($post->member_id)->user->id)->username;
-//        dd($user);
+       $comments = $post->comments;
+//       show author name of each comment
+        foreach ($comments as $comment){
+            $comment->author = User::find(Member::find($comment->member_id)->user->id)->username;
+        }
         return Inertia::render("Posts/Show",
-            ["post" => $post,"author"=> $author, "comments" => $post->comments]);
+            ["post" => $post,"author"=> $author, "comments" => $comments]);
 
     }
 
