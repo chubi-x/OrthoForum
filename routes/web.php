@@ -35,7 +35,12 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 //    store post
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::patch('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
+//    edit post view
+    Route::get('/posts/{id}/edit', [PostController::class, 'edit'])->name('posts.edit');
+    //    show post
     Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
+    // edit post
     Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
 });
 

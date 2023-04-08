@@ -1,16 +1,12 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import {Link, useForm} from "@inertiajs/react";
-import {Transition} from "@headlessui/react";
 import SecondaryButton from "@/Components/SecondaryButton";
 
 export default function Index({auth,posts}){
-    const {get, delete:deletePost,processing, recentlySuccessful} = useForm({
+    const {get, processing} = useForm({
 
     });
 
-    const deleteFunction = (id) => {
-        deletePost(route('posts.destroy', [id]));
-    };
     const newPost = () => {
         get(route('posts.create'));
     }
@@ -27,20 +23,12 @@ export default function Index({auth,posts}){
                     <div key={post.id}>
                         <h2>
                             <Link href={route('posts.show',[post.id])}>
-                                {post.text}
+                                <u>
+                                    {post.text}
+                                </u>
                             </Link>
                         </h2>
-                        <SecondaryButton onClick={()=>deleteFunction(post.id)} disabled={processing} className='inline'>
-                            Delete Post
-                        </SecondaryButton>
-                        <Transition
-                            show={recentlySuccessful}
-                            enterFrom="opacity-0"
-                            leaveTo="opacity-0"
-                            className="transition ease-in-out"
-                        >
-                            <p className="text-sm text-black">Deleted.</p>
-                        </Transition>
+
                     </div>
                     ))
                 }

@@ -58,7 +58,7 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return Inertia::render("Posts/Edit", ["post" => Post::find($id)]);
     }
 
     /**
@@ -66,7 +66,8 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        Post::find($id)->update($request->all());
+        Return Redirect::route("posts.show", ["id" => $id]);
     }
 
     /**
@@ -75,7 +76,7 @@ class PostController extends Controller
     public function destroy(string $id)
     {
         Post::find($id)->delete();
-//        return Redirect::route("posts.index");
+        return Redirect::route("posts.index");
 
     }
 }
