@@ -12,15 +12,21 @@ export default function Show({auth, post, author, comments}) {
     });
     const {
         data:commentsData, setData:setCommentsData,
-        // delete:deleteCommentMethod,
         post:postComment,
-        processing:processingComment,
-        recentlySuccessful:recentlySuccessfulComments,
-        errors:commentsErrors
+        processing:processingPostComment,
+        recentlySuccessful:recentlySuccessfulPostComment,
+        errors:postCommentsErrors
     } = useForm({
         text: '',
         post_id: post.id,
         member_id: auth.user.id,
+    });
+    const {
+        delete:deleteCommentMethod,
+        processing:processingDeleteComment,
+        recentlySuccessful:recentlySuccessfulDeleteComment,
+        errors:deleteCommentsErrors
+    } = useForm({
     });
     const  [showComment,setShowComment] = useState(false);
     const deletePost = (postId) => {
@@ -45,11 +51,11 @@ export default function Show({auth, post, author, comments}) {
         if(post.member_id === auth.user.userable_id) {
             toReturn =  (
                 <>
-                    <SecondaryButton onClick={(e) => deletePost(post.id)}
+                    <SecondaryButton onClick={() => deletePost(post.id)}
                                      disabled={processingPost} className='inline'>
                         Delete Post
                     </SecondaryButton>
-                    <SecondaryButton onClick={(e) => editPost(post.id)}
+                    <SecondaryButton onClick={() => editPost(post.id)}
                                      disabled={processingPost} className='inline'>
                         Edit Post
                     </SecondaryButton>
@@ -60,13 +66,37 @@ export default function Show({auth, post, author, comments}) {
             auth.user.userable_type === 'App\\Models\\Admin' ||
             auth.user.userable_type === 'App\\Models\\Moderator'){
             toReturn =  (
-                    <SecondaryButton onClick={(e) => deletePost(post.id)}
+                    <SecondaryButton onClick={() => deletePost(post.id)}
                                      disabled={processingPost} className='inline'>
                         Delete Post
                     </SecondaryButton>
             )
         }
         return toReturn;
+    }
+    const canDeleteComment = (comment) => {
+        if(comment.member_id === auth.user.userable_id ||
+            auth.user.userable_type === 'App\\Models\\Admin' ||
+            auth.user.userable_type === 'App\\Models\\Moderator'){
+            return (
+               <>
+                   <SecondaryButton onClick={(e) => deleteComment(e, comment.id)}
+                                    disabled={processingDeleteComment} className='inline'>
+                       Delete Comment
+                   </SecondaryButton>
+                   <InputError message={deleteCommentsErrors.text} className="mt-2"/>
+                   <Transition
+                       show={recentlySuccessfulDeleteComment}
+                       enterFrom="opacity-0"
+                       leaveTo="opacity-0"
+                       className="transition ease-in-out"
+                   >
+                       <p className="text-sm text-black">Comment Deleted.</p>
+                   </Transition>
+               </>
+
+            )
+        }
     }
     return (
         <AuthenticatedLayout user={auth.user}>
@@ -84,6 +114,10 @@ export default function Show({auth, post, author, comments}) {
                                 <p>Author: {comment.author}</p>
                                 <h3>text:  {comment.text} </h3>
                                 <p>Likes: {comment.likes}</p>
+                                {
+                                    canDeleteComment(comment)
+                                }
+
                             </div>
                         ))
                     }
@@ -103,28 +137,21 @@ export default function Show({auth, post, author, comments}) {
                             onChange={(e) => setCommentsData('text', e.target.value)}
                             required
                         />
-                        <InputError message={commentsErrors.text} className="mt-2"/>
-                        <SecondaryButton type='submit' disabled={processingComment} className='inline'>
+                        <InputError message={postCommentsErrors.text} className="mt-2"/>
+                        <SecondaryButton type='submit' disabled={processingPostComment} className='inline'>
                            Post
                         </SecondaryButton>
                     </form>
                     }
-
-                    <SecondaryButton onClick={()=>deletePost(post.id)} disabled={processingPost} className='inline'>
-                        Delete Post
-                    </SecondaryButton>
-
-                    <SecondaryButton onClick={()=>editPost(post.id)} disabled={processingPost} className='inline'>
-                        Edit Post
-                    </SecondaryButton>
                     <Transition
-                        show={recentlySuccessfulComments}
+                        show={recentlySuccessfulPostComment}
                         enterFrom="opacity-0"
                         leaveTo="opacity-0"
                         className="transition ease-in-out"
                     >
                         <p className="text-sm text-black">Comment posted.</p>
                     </Transition>
+
 
                 </div>
             </div>
