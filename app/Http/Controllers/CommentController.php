@@ -28,6 +28,7 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
+//        dd($request->all());
         $comment = new Comment();
         $comment->member()->associate($request->all()["member_id"]);
         $comment->post()->associate($request->all()["post_id"]);
@@ -43,21 +44,6 @@ class CommentController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
