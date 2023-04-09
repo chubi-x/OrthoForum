@@ -7,6 +7,7 @@ import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 import {useState} from "react";
+import ReactTimeAgo from "react-time-ago";
 
 export default function Show({auth, post, author, comments}) {
     const  [showComment,setShowComment] = useState(false);
@@ -98,8 +99,11 @@ export default function Show({auth, post, author, comments}) {
                 <div>
                     <h2> Text:  {post.text} </h2>
                     <p>Likes: {post.likes}</p>
+                    <p>Created: { <ReactTimeAgo date={new Date(post.created_at)} locale="en-US"/>  }</p>
+                    <p>Last Updated: { <ReactTimeAgo date={ new Date(post.updated_at)} locale="en-US"/>  }</p>
                     {canEditPost()}
                     {canDeletePost()}
+
                     <h3> {comments.length > 0 ? 'Comments' : 'No Comments'}  </h3>
                     {
                         comments.map((comment) => (
