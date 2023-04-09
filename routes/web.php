@@ -57,8 +57,15 @@ Route::middleware(['auth','verified'])->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update-avatar', [ProfileController::class, 'updateAvatar'])->name('profile.update-avatar');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// GET ASSET PATHS
+Route::get('/avatars/{filename}', function ($filename)
+{
+    return response()->file(storage_path('app/public/avatars/' . $filename));
+})->name('avatars.path');
 
 require __DIR__.'/auth.php';

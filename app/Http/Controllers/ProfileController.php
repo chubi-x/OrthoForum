@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Image;
 use App\Models\Member;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
@@ -41,6 +42,26 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit');
     }
 
+    /**
+     * Update User's Avatar
+     */
+    public function updateAvatar(Request $request)
+    {
+//        dd($request->file('avatar'));
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $user = $request->user();
+        $user->avatar()->delete();
+        $image = new Image;
+        $request->file('avatar')->storeAs('avatars', $user->id . '.jpg', 'public');
+        $image->path = $user->id . '.jpg';
+        $image->type = 'AVATAR';
+        $user->avatar()->save($image);
+//        dd($user->avatar);
+        return Redirect::route('profile.edit');
+    }
     /**
      * Delete the user's account.
      */
