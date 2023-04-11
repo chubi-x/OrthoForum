@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Image;
 use App\Models\Member;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class PostController extends Controller
@@ -102,7 +104,15 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        Post::find($id)->delete();
+        Post::findorFail($id)->delete();
+
+        $images = Image::where("imageable_id", $id)->where("type", "POST")->get();
+        foreach ($images as $image){
+            if(Storage::delete('public/posts/' . $image->path)){
+                $image->delete();
+            }
+        }
+
         return Redirect::route("posts.index");
 
     }
