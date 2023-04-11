@@ -13,6 +13,14 @@ use Inertia\Inertia;
 
 class PostController extends Controller
 {
+    public function indexByUser(string $id)
+    {
+        $posts = Post::all()-> where("member_id", $id);
+        foreach ($posts as $post){
+            $post->images = $post->images;
+        }
+        return Inertia::render("Posts/Index", ["posts" => $posts]);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -45,11 +53,7 @@ class PostController extends Controller
 
         $this->uploadPostImages($request, $post);
 
-           $post->images()->saveMany($imageModels);
-           $post->save();
-        }
-
-        return Redirect::route("posts.index");
+        return Redirect::route("posts.indexByUser");
     }
 
     /**
@@ -73,10 +77,15 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, string $id)
     {
+        $user = $request->user();
+        $member = Member::find($user->userable_id);
         $post =  Post::find($id);
         $images = $post->images;
+        if($member->id != $post->member_id){
+            return Redirect::route("posts.indexByUser");
+        }
         return Inertia::render("Posts/Edit", ["post" => $post, "images" => $images]);
     }
 
@@ -105,7 +114,9 @@ class PostController extends Controller
             }
         }
 
-        return Redirect::route("posts.index");
+        return Redirect::route("posts.indexByUser");
+
+    }
 
     /**
      * @param Request $request
