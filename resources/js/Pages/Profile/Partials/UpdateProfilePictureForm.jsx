@@ -4,6 +4,7 @@ import InputError from "@/Components/InputError";
 import {Transition} from "@headlessui/react";
 
 export default function UpdateProfilePictureForm({user}){
+    const {path:avatarPath} = user.avatar;
     const { setData, post:postAvatar,progress, recentlySuccessful, errors} = useForm({
         avatar: '',
         _method: 'post',
@@ -18,7 +19,7 @@ export default function UpdateProfilePictureForm({user}){
     return(
         <div className='text-white'>
             <div className='w-20 h-20 bg-white rounded-full'>
-                <img src={route('avatars.path',[user.avatar.path])} alt="profile picture"/>
+                { user.avatar &&  <img loading="eager" src={route('avatars.path', [avatarPath])} alt="profile picture"/>}
             </div>
             <form onSubmit={(e)=>submit(e)} encType='multipart/form-data'>
                 <InputLabel htmlFor={'avatar'} value={'Profile Picture'}/>
