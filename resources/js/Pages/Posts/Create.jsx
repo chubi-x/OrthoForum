@@ -4,14 +4,17 @@ import {useForm, usePage} from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Textarea from "@/Components/Textarea";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import {handleImageChange} from "@/Utils/ImageUploadHelper";
 
 export default function Create() {
     const user = usePage().props.auth.user;
     const { data, setData, post, errors, processing } = useForm({
+        images: [],
         text: '',
         userable_id: ''
     });
+    const [countImages, setCountImages] = useState([]);
 
     useEffect(() => {
         setData('userable_id', user.userable_id);
@@ -21,18 +24,29 @@ export default function Create() {
         e.preventDefault();
         post(route('posts.store'));
     };
+    const showImages = () => {
+        countImages.length <4 ? setCountImages(prev=>( [...prev, 0 ] ) ) : alert("You can't add more than 4 images");
+    }
     return (
         <AuthenticatedLayout user={user}>
             <div className='w-1/2 mx-auto'>
                 <form onSubmit={submit} className="mt-6 space-y-6">
                     <div>
+                        <PrimaryButton type="button" onClick={ (e)=> showImages(e) } disabled={processing}>
+                            Add Image
+                        </PrimaryButton>
+                        {
+                            countImages.map( (image, index) => (
+                                    <input key={index} type="file" name={`post-image-${index}`} onChange={ (e)=> handleImageChange(e,data, setData) } />
+                            ))
+                        }
                         <InputLabel htmlFor="post" value="Post" />
 
                         <Textarea
                             id="post"
                             className="mt-1 block w-full"
                             value={data.text}
-                            onChange={(e) => setData('text', e.target.value)}
+                            onChange={ (e) => setData('text', e.target.value) }
                             required
                             isFocused
                             autoComplete="text"

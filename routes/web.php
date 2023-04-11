@@ -68,4 +68,9 @@ Route::get('/avatars/{filename}', function ($filename)
     return response()->file(storage_path('app/public/avatars/' . $filename));
 })->name('avatars.path');
 
+Route::get('/images/{filename}', function ($filename)
+{
+    return response()->file(storage_path('app/public/posts/' . $filename));
+})->name('posts.image-path');
+
 require __DIR__.'/auth.php';

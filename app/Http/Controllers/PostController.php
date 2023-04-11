@@ -17,6 +17,9 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $posts = Post::all()-> where("member_id", $request->user()->userable_id);
+        foreach ($posts as $post){
+            $post->images = $post->images;
+        }
         return Inertia::render("Posts/Index", ["posts" => $posts]);
     }
 
@@ -37,6 +40,23 @@ class PostController extends Controller
         $post->fill($request->all(["text"]));
         $post->member()->associate($request->all()["userable_id"]);
         $post->save();
+
+       if( isset($request->all()["images"])) {
+           $imageModels = [];
+            foreach ($request->all()["images"] as $index => $image) {
+                $imageModel = new Image();
+                $image->storeAs('posts', 'post-' . $post->id . '-image-' . $index . '.' . $image->extension(), 'public');
+                $imageModel->path = 'post-' . $post->id . '-image-' . $index . '.' . $image->extension();
+                $imageModel->imageable()->associate($post);
+                $imageModel->type = "POST";
+                $imageModel->save();
+                $imageModels[] = $imageModel;
+            }
+
+           $post->images()->saveMany($imageModels);
+           $post->save();
+        }
+
         return Redirect::route("posts.index");
     }
 
@@ -48,6 +68,7 @@ class PostController extends Controller
         $post = Post::find($id);
         $author = User::find(Member::find($post->member_id)->user->id)->username;
        $comments = $post->comments;
+       $images = $post->images;
 //       show author name of each comment
         foreach ($comments as $comment){
             $comment->author = User::find(Member::find($comment->member_id)->user->id)->username;
@@ -62,7 +83,9 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        return Inertia::render("Posts/Edit", ["post" => Post::find($id)]);
+        $post =  Post::find($id);
+        $images = $post->images;
+        return Inertia::render("Posts/Edit", ["post" => $post, "images" => $images]);
     }
 
     /**

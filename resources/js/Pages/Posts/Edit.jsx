@@ -4,12 +4,15 @@ import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
+import {useState} from "react";
+import {handleImageChange} from "@/Utils/ImageUploadHelper";
 
-export default function Edit({auth, post}){
+export default function Edit({auth, post, images}){
      const {data, setData, patch, processing, errors} = useForm({
+         images: [],
          text: post.text,
      });
-
+    const [countImages, setCountImages] = useState([]);
      const submit = (e) => {
         e.preventDefault();
         patch(route('posts.update', [post.id]), {
@@ -20,12 +23,25 @@ export default function Edit({auth, post}){
             }
         });
      }
+
+    const showImages = () => {
+        countImages.length < 4 - images?.length ? setCountImages(prev=>( [...prev, 0 ] ) ) : alert("You can't add more than 4 images");
+    }
     return (
         <AuthenticatedLayout user={auth.user}>
             <div>
                 <h1>Edit Post</h1>
 
                 <form onSubmit={(e)=>submit(e)}>
+
+                    <PrimaryButton type="button" onClick={ (e)=> showImages(e) } disabled={processing}>
+                        Add Image
+                    </PrimaryButton>
+                    {
+                        countImages.map( (_, index) => (
+                            <input key={index} type="file" name={`post-image-${index}`} onChange={ (e)=> handleImageChange(e,data,setData) } />
+                        ))
+                    }
                     <InputLabel htmlFor="text" value="Edit Post" />
                     <TextInput
                         id="text"

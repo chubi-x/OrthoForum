@@ -3,10 +3,7 @@ import {Link, useForm} from "@inertiajs/react";
 import SecondaryButton from "@/Components/SecondaryButton";
 
 export default function Index({auth,posts}){
-    const {get, processing} = useForm({
-
-    });
-
+    const {get, processing} = useForm();
     const newPost = () => {
         get(route('posts.create'));
     }
@@ -28,6 +25,12 @@ export default function Index({auth,posts}){
                                 </u>
                             </Link>
                         </h2>
+                        {
+                            post.images.map((image,index) => (
+                                <img key={image.id} loading="lazy" src={route("posts.image-path",[image.path])} alt={post.id + 'image '+ index} />
+                            ))
+                        }
+
 
                     </div>
                     ))

@@ -9,7 +9,7 @@ import InputError from "@/Components/InputError";
 import {useState} from "react";
 import ReactTimeAgo from "react-time-ago";
 
-export default function Show({auth, post, author, comments}) {
+export default function Show({auth, post, author, comments, images}) {
     const  [showComment,setShowComment] = useState(false);
 
     const {get:getEditPost, delete:deletePostMethod , processing:processingPost} = useForm({
@@ -103,6 +103,12 @@ export default function Show({auth, post, author, comments}) {
                     <p>Last Updated: { <ReactTimeAgo date={ new Date(post.updated_at)} locale="en-US"/>  }</p>
                     {canEditPost()}
                     {canDeletePost()}
+
+                    {
+                        images.map((image,index) => (
+                            <img key={image.id} loading="lazy" src={route("posts.image-path",[image.path])} alt={post.id + 'image '+ index} />
+                        ))
+                    }
 
                     <h3> {comments.length > 0 ? 'Comments' : 'No Comments'}  </h3>
                     {
