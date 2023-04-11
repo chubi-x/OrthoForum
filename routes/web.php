@@ -32,21 +32,16 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth','verified'])->group(function () {
     //    create post view
     Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
-    //   show all posts
-    Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
     //    store post
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     //    update post
     Route::post('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
     //    edit post view
     Route::get('/posts/{id}/edit', [PostController::class, 'edit'])->name('posts.edit');
-    //    show post
-    Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
     //    edit post
     Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
 });
 //PUBLIC POSTS ROUTES
-Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 //    show all posts by user
 Route::get('/posts/user/{id}', [PostController::class, 'indexByUser'])->name('posts.indexByUser');
 //    show post

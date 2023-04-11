@@ -21,17 +21,6 @@ class PostController extends Controller
         }
         return Inertia::render("Posts/Index", ["posts" => $posts]);
     }
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
-    {
-        $posts = Post::all()-> where("member_id", $request->user()->userable_id);
-        foreach ($posts as $post){
-            $post->images = $post->images;
-        }
-        return Inertia::render("Posts/Index", ["posts" => $posts]);
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -70,7 +59,7 @@ class PostController extends Controller
             $comment->author = User::find(Member::find($comment->member_id)->user->id)->username;
         }
         return Inertia::render("Posts/Show",
-            ["post" => $post,"author"=> $author, "comments" => $comments]);
+            ["post" => $post,"author"=> $author, "comments" => $comments, "images" => $images]);
 
     }
 
