@@ -74,8 +74,6 @@ export default function Navbar({ user, header, children }) {
                                         Login
                                     </NavLink>
                                 </div>
-
-
                             }
                         </div>
 
