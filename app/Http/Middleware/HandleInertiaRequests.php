@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Moderator;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
@@ -31,11 +32,19 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $user = $request->user();
-//       $avatar = $user?->avatar;
+
+        $moderator = $user?->userable_type == "App\Models\Member"
+            ?
+            Moderator::where("member_id", $user->userable_id)
+        :null;
+
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $user,
-//                'avatar' => $avatar,
+                'moderatorId' => $moderator?->first()?->id
+            ],
+            'flash' => [
+                'moderatorError' => fn () => $request->session()->get('moderator-error'),
             ],
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy)->toArray(), [

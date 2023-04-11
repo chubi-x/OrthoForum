@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ModeratorController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -56,11 +57,20 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
+// PROFILE ROUTES
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update-avatar', [ProfileController::class, 'updateAvatar'])->name('profile.update-avatar');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+//MODERATOR ROUTES
+Route::post('/moderator/create', [ModeratorController::class, 'store'])->name('moderator.store')
+    ->middleware('auth','verified');
+
+Route::middleware(['auth','verified','isModerator'])->group(function () {
+    Route::get('/moderator/dashboard/{id}', [ModeratorController::class, 'show'] )-> name('moderator.show');
 });
 
 // GET ASSET PATHS

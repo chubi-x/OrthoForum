@@ -5,7 +5,7 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import {Link} from '@inertiajs/react';
 
-export default function Navbar({ user, header, children }) {
+export default function Navbar({ user, moderatorId, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
@@ -23,6 +23,12 @@ export default function Navbar({ user, header, children }) {
                             { user && <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                         <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                             Dashboard
+                                        </NavLink>
+                                    </div>
+                            }
+                            { moderatorId && <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                        <NavLink href={route('moderator.show',{id:moderatorId})} active={route().current('moderator.show')}>
+                                           Moderator Dashboard
                                         </NavLink>
                                     </div>
                             }
