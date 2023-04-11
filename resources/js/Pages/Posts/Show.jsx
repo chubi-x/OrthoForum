@@ -1,4 +1,4 @@
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import Navbar from "@/Layouts/Navbar";
 import Comment from "@/Pages/Posts/Partials/Comment";
 import SecondaryButton from "@/Components/SecondaryButton";
 import {Transition} from "@headlessui/react";
@@ -10,6 +10,7 @@ import {useState} from "react";
 import ReactTimeAgo from "react-time-ago";
 
 export default function Show({auth, post, author, comments, images}) {
+    // console.log({auth, post, author, comments, images})
     const  [showComment,setShowComment] = useState(false);
 
     const {get:getEditPost, delete:deletePostMethod , processing:processingPost} = useForm({
@@ -96,7 +97,7 @@ export default function Show({auth, post, author, comments, images}) {
     }
 
     return (
-        <AuthenticatedLayout user={auth.user}>
+        <Navbar user={auth?.user}>
             <div>
                 <h1>Post</h1>
                 <p>Author: {author}</p>
@@ -139,6 +140,6 @@ export default function Show({auth, post, author, comments, images}) {
 
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </Navbar>
     )
 }

@@ -1,4 +1,4 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import Navbar from '@/Layouts/Navbar';
 import DeleteUserForm from './Partials/DeleteUserForm';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
@@ -7,7 +7,7 @@ import UpdateProfilePictureForm from "@/Pages/Profile/Partials/UpdateProfilePict
 
 export default function Edit({ auth, mustVerifyEmail, status }) {
     return (
-        <AuthenticatedLayout
+        <Navbar
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Profile</h2>}
         >
@@ -35,6 +35,6 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </Navbar>
     );
 }

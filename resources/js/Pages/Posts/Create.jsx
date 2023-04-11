@@ -3,7 +3,7 @@ import InputError from "@/Components/InputError";
 import {useForm, usePage} from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Textarea from "@/Components/Textarea";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import Navbar from "@/Layouts/Navbar";
 import {useEffect, useState} from "react";
 import {handleImageChange} from "@/Utils/ImageUploadHelper";
 
@@ -28,7 +28,7 @@ export default function Create() {
         countImages.length <4 ? setCountImages(prev=>( [...prev, 0 ] ) ) : alert("You can't add more than 4 images");
     }
     return (
-        <AuthenticatedLayout user={user}>
+        <Navbar user={user}>
             <div className='w-1/2 mx-auto'>
                 <form onSubmit={submit} className="mt-6 space-y-6">
                     <div>
@@ -61,6 +61,6 @@ export default function Create() {
                     </div>
                 </form>
             </div>
-        </AuthenticatedLayout>
+        </Navbar>
     );
 }

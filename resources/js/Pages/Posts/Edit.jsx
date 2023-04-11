@@ -1,4 +1,4 @@
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import Navbar from "@/Layouts/Navbar";
 import {useForm} from "@inertiajs/react";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
@@ -28,7 +28,7 @@ export default function Edit({auth, post, images}){
         countImages.length < 4 - images?.length ? setCountImages(prev=>( [...prev, 0 ] ) ) : alert("You can't add more than 4 images");
     }
     return (
-        <AuthenticatedLayout user={auth.user}>
+        <Navbar user={auth.user}>
             <div>
                 <h1>Edit Post</h1>
 
@@ -39,7 +39,7 @@ export default function Edit({auth, post, images}){
                     </PrimaryButton>
                     {
                         countImages.map( (_, index) => (
-                            <input key={index} type="file" name={`post-image-${index}`} onChange={ (e)=> handleImageChange(e,data,setData) } />
+                            <input key={index} type="file" name={`post-image-${index}`} onChange={ (e)=> handleImageChange(e, data, setData) } />
                         ))
                     }
                     <InputLabel htmlFor="text" value="Edit Post" />
@@ -60,6 +60,6 @@ export default function Edit({auth, post, images}){
                     </PrimaryButton>
                 </form>
             </div>
-        </AuthenticatedLayout>
+        </Navbar>
     )
 }

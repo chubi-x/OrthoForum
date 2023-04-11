@@ -5,7 +5,7 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import {Link} from '@inertiajs/react';
 
-export default function Authenticated({ user, header, children }) {
+export default function Navbar({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
@@ -20,15 +20,16 @@ export default function Authenticated({ user, header, children }) {
                                 </Link>
                             </div>
 
-                            <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                    Dashboard
-                                </NavLink>
-                            </div>
+                            { user && <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                        <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                            Dashboard
+                                        </NavLink>
+                                    </div>
+                            }
                         </div>
 
                         <div className="hidden sm:flex sm:items-center sm:ml-6">
-                            <div className="ml-3 relative">
+                            { user ? <div className="ml-3 relative">
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md">
@@ -36,7 +37,7 @@ export default function Authenticated({ user, header, children }) {
                                                 type="button"
                                                 className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
                                             >
-                                                {user.name}
+                                                {user?.fullname}
 
                                                 <svg
                                                     className="ml-2 -mr-0.5 h-4 w-4"
@@ -62,6 +63,20 @@ export default function Authenticated({ user, header, children }) {
                                     </Dropdown.Content>
                                 </Dropdown>
                             </div>
+
+                                :
+                                <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                    <NavLink href={route('register')} active={route().current('dashboard')}>
+                                        Register
+                                    </NavLink>
+
+                                    <NavLink href={route('login')} active={route().current('dashboard')}>
+                                        Login
+                                    </NavLink>
+                                </div>
+
+
+                            }
                         </div>
 
                         <div className="-mr-2 flex items-center sm:hidden">
@@ -90,7 +105,7 @@ export default function Authenticated({ user, header, children }) {
                     </div>
                 </div>
 
-                <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
+                {user && <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                     <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
                             Dashboard
@@ -99,8 +114,9 @@ export default function Authenticated({ user, header, children }) {
 
                     <div className="pt-4 pb-1 border-t border-gray-200">
                         <div className="px-4">
-                            <div className="font-medium text-base text-gray-800 dark:text-gray-200">{user.name}</div>
-                            <div className="font-medium text-sm text-gray-500">{user.email}</div>
+                            <div
+                                className="font-medium text-base text-gray-800 dark:text-gray-200">{user?.fullname}</div>
+                            <div className="font-medium text-sm text-gray-500">{user?.email}</div>
                         </div>
 
                         <div className="mt-3 space-y-1">
@@ -110,7 +126,7 @@ export default function Authenticated({ user, header, children }) {
                             </ResponsiveNavLink>
                         </div>
                     </div>
-                </div>
+                </div>}
             </nav>
 
             {header && (
