@@ -4,7 +4,8 @@ import InputError from "@/Components/InputError";
 import {Transition} from "@headlessui/react";
 
 export default function UpdateProfilePictureForm({user}){
-    const {path:avatarPath} = user.avatar;
+    console.log(user)
+    const {path:avatarPath} = user?.avatar || {};
     const { setData, post:postAvatar,progress, recentlySuccessful, errors} = useForm({
         avatar: '',
         _method: 'post',
