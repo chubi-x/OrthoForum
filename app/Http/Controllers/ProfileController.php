@@ -55,8 +55,9 @@ class ProfileController extends Controller
         $user = $request->user();
         $user->avatar()->delete();
         $image = new Image;
-        $request->file('avatar')->storeAs('avatars', $user->id . '.jpg', 'public');
-        $image->path = $user->id . '.jpg';
+        $avatar = $request->file('avatar');
+        $avatar->storeAs('avatars', $user->id . '.' . $avatar->extension(), 'public');
+        $image->path = $user->id .'.'. $avatar->extension();
         $image->type = 'AVATAR';
         $user->avatar()->save($image);
 //        dd($user->avatar);
