@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->longText("text");
             $table->bigInteger("likes")->default(0);
-            $table->foreignId("member_id")->constrained()->restrictOnDelete()->cascadeOnUpdate();
+            $table->foreignId("member_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId("post_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
 
