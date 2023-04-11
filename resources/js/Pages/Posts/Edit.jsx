@@ -8,14 +8,14 @@ import {useState} from "react";
 import {handleImageChange} from "@/Utils/ImageUploadHelper";
 
 export default function Edit({auth, post, images}){
-     const {data, setData, patch, processing, errors} = useForm({
+     const {data, setData, post:postEdit, processing, errors} = useForm({
          images: [],
          text: post.text,
      });
     const [countImages, setCountImages] = useState([]);
      const submit = (e) => {
         e.preventDefault();
-        patch(route('posts.update', [post.id]), {
+        postEdit(route('posts.update', [post.id]), {
             preserveState: true,
             onSuccess: () => {
                 // redirect to show page

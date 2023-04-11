@@ -37,7 +37,7 @@ Route::middleware(['auth','verified'])->group(function () {
     //    store post
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     //    update post
-    Route::patch('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
+    Route::post('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
     //    edit post view
     Route::get('/posts/{id}/edit', [PostController::class, 'edit'])->name('posts.edit');
     //    show post

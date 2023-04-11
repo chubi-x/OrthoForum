@@ -43,17 +43,7 @@ class PostController extends Controller
         $post->member()->associate($request->all()["userable_id"]);
         $post->save();
 
-       if( isset($request->all()["images"])) {
-           $imageModels = [];
-            foreach ($request->all()["images"] as $index => $image) {
-                $imageModel = new Image();
-                $image->storeAs('posts', 'post-' . $post->id . '-image-' . $index . '.' . $image->extension(), 'public');
-                $imageModel->path = 'post-' . $post->id . '-image-' . $index . '.' . $image->extension();
-                $imageModel->imageable()->associate($post);
-                $imageModel->type = "POST";
-                $imageModel->save();
-                $imageModels[] = $imageModel;
-            }
+        $this->uploadPostImages($request, $post);
 
            $post->images()->saveMany($imageModels);
            $post->save();
@@ -95,7 +85,9 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        Post::find($id)->update($request->all());
+       $post = Post::find($id);
+       $post->fill($request->all(["text"]));
+       $this->uploadPostImages($request, $post);
         Return Redirect::route("posts.show", ["id" => $id]);
     }
 
@@ -115,5 +107,26 @@ class PostController extends Controller
 
         return Redirect::route("posts.index");
 
+    /**
+     * @param Request $request
+     * @param Post $post
+     * @return void
+     */
+    private function uploadPostImages(Request $request, Post $post): void {
+        if (isset($request->all()["images"])) {
+            $imageModels = [];
+            foreach ($request->all()["images"] as $index => $image) {
+                $imageModel = new Image();
+                $image->storeAs('posts', 'post-' . $post->id . '-image-' . $index . '.' . $image->extension(), 'public');
+                $imageModel->path = 'post-' . $post->id . '-image-' . $index . '.' . $image->extension();
+                $imageModel->imageable()->associate($post);
+                $imageModel->type = "POST";
+                $imageModel->save();
+                $imageModels[] = $imageModel;
+            }
+
+            $post->images()->saveMany($imageModels);
+            $post->save();
+        }
     }
 }
