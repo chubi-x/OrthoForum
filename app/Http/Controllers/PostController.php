@@ -36,11 +36,13 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            "text" => "required",
+        ]);
         $post = new Post;
         $post->fill($request->all(["text"]));
         $post->member()->associate($request->all()["userable_id"]);
         $post->save();
-
         $this->uploadPostImages($request, $post);
 
         return Redirect::route("posts.indexByUser",[ "id" => $request->all()["userable_id"]]);
@@ -92,6 +94,9 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request->validate([
+            "text" => "required",
+        ]);
         $post = Post::findorFail($id);
         //check if user is the author of the post using gate allows method
         if(!Gate::allows('edit-post', $post)){
@@ -133,6 +138,10 @@ class PostController extends Controller
      */
     private function uploadPostImages(Request $request, Post $post): void {
         if (isset($request->all()["images"])) {
+            //validate images
+           $request->validate([
+               'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+           ]);
             $imageModels = [];
             foreach ($request->all()["images"] as $index => $image) {
                 $imageModel = new Image();

@@ -37,9 +37,16 @@ export default function Create() {
                         </PrimaryButton>
                         {
                             countImages.map( (image, index) => (
-                                    <input key={index} type="file" name={`post-image-${index}`} onChange={ (e)=> handleImageChange(e,data, setData) } />
+                                   <>
+                                       <input key={index} type="file" name={`post-image-${index}`} onChange={ (e)=> handleImageChange(e,data, setData) } />
+                                       <InputError className="mt-2" message={errors[`images.${[index]}`]} />
+
+                                   </>
+
                             ))
+
                         }
+
                         <InputLabel htmlFor="post" value="Post" />
 
                         <Textarea
@@ -51,7 +58,6 @@ export default function Create() {
                             isFocused
                             autoComplete="text"
                         />
-
                         <InputError className="mt-2" message={errors.text} />
                     </div>
 
