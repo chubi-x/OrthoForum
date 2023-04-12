@@ -9,7 +9,7 @@ import InputError from "@/Components/InputError";
 import {useState} from "react";
 import ReactTimeAgo from "react-time-ago";
 
-export default function Show({auth, post, author, comments, images}) {
+export default function Show({auth, post, author, comments, images, canEditPost, canDeletePost}) {
     // console.log({auth, post, author, comments, images})
     const  [showComment,setShowComment] = useState(false);
 
@@ -40,12 +40,11 @@ export default function Show({auth, post, author, comments, images}) {
         } );
     }
     const showCommentForm = () => {
-
         auth.user ? setShowComment(!showComment) : alert("You need to be logged in to comment");
     }
 
-    const canEditPost = () =>{
-        if(post?.member_id === auth?.user?.userable_id) {
+    const showEditButton = () =>{
+        if(canEditPost) {
            return (
                 <>
                     <SecondaryButton onClick={() => editPost(post.id)}
@@ -57,11 +56,8 @@ export default function Show({auth, post, author, comments, images}) {
         }
     }
 
-    const canDeletePost = () => {
-        if (
-            post?.member_id === auth?.user?.userable_id ||
-            auth?.user?.userable_type === 'App\\Models\\Admin' ||
-            auth?.user?.userable_type === 'App\\Models\\Moderator') {
+    const showDeleteButton = () => {
+        if (canDeletePost) {
 
             // TODO: notify user if admin or moderator deleted post
             return (
@@ -106,8 +102,8 @@ export default function Show({auth, post, author, comments, images}) {
                     <p>Likes: {post?.likes}</p>
                     <p>Created: { <ReactTimeAgo date={new Date(post?.created_at)} locale="en-US"/>  }</p>
                     <p>Last Updated: { <ReactTimeAgo date={ new Date(post?.updated_at)} locale="en-US"/>  }</p>
-                    {canEditPost()}
-                    {canDeletePost()}
+                    {showEditButton()}
+                    {showDeleteButton()}
 
                     {
                         images?.map((image,index) => (

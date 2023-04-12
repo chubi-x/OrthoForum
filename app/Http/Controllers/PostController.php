@@ -7,6 +7,7 @@ use App\Models\Member;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -58,23 +59,31 @@ class PostController extends Controller
         foreach ($comments as $comment){
             $comment->author = User::find(Member::find($comment->member_id)->user->id)->username;
         }
+        $canEditPost = Gate::allows('edit-post', $post);
+        $canDeletePost = Gate::allows('delete-post', $post);
         return Inertia::render("Posts/Show",
-            ["post" => $post,"author"=> $author, "comments" => $comments, "images" => $images]);
+            [
+                "post" => $post,
+                "author"=> $author,
+                "comments" => $comments,
+                "images" => $images,
+                "canEditPost" => $canEditPost,
+                "canDeletePost" => $canDeletePost
+            ]);
 
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request, string $id)
+    public function edit(string $id)
     {
-        $user = $request->user();
-        $member = Member::find($user->userable_id);
-        $post =  Post::find($id);
-        $images = $post->images;
-        if($member->id != $post->member_id){
-            return Redirect::route("posts.indexByUser");
+        $post =  Post::findorFail($id);
+        //check if user is the author of the post using gate allows method
+        if(!Gate::allows('edit-post', $post)){
+            abort(403, 'You cannot edit this post');
         }
+        $images = $post->images;
         return Inertia::render("Posts/Edit", ["post" => $post, "images" => $images]);
     }
 
@@ -83,7 +92,11 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-       $post = Post::find($id);
+        $post = Post::findorFail($id);
+        //check if user is the author of the post using gate allows method
+        if(!Gate::allows('edit-post', $post)){
+            abort(403, 'You cannot edit this post');
+        }
        $post->fill($request->all(["text"]));
        $this->uploadPostImages($request, $post);
         Return Redirect::route("posts.show", ["id" => $id]);
@@ -92,14 +105,20 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request , string $id)
     {
-        Post::findorFail($id)->delete();
-
-        $images = Image::where("imageable_id", $id)->where("type", "POST")->get();
-        foreach ($images as $image){
-            if(Storage::delete('public/posts/' . $image->path)){
-                $image->delete();
+        $post = Post::findorFail($id);
+        //check if user is the author of the post using gate allows method
+        if(!Gate::allows('delete-post', $post)){
+            abort(403, 'You cannot delete this post');
+        }
+        $post->delete();
+        $images = Image::all()->where("imageable_id", $id)->where("type", "POST");
+        if($images->count() > 0){
+            foreach ($images as $image){
+                if(Storage::delete('public/posts/' . $image->path)){
+                    $image->delete();
+                }
             }
         }
 
