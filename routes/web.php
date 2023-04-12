@@ -4,6 +4,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ModeratorController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -73,6 +74,21 @@ Route::middleware(['auth','verified','isModerator'])->group(function () {
     Route::get('/moderator/dashboard/{id}', [ModeratorController::class, 'show'] )-> name('moderator.show');
 });
 
+//ROOM ROUTES
+
+Route::middleware(['auth', 'isModerator'])->group(function () {
+    Route::get('/rooms/create', [RoomController::class, 'create'])->name('rooms.create');
+    Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
+    Route::get('/rooms/{id}/edit', [RoomController::class, 'edit'])->name('rooms.edit');
+    Route::post('/rooms/{id}', [RoomController::class, 'update'])->name('rooms.update');
+    Route::delete('/rooms/{id}', [RoomController::class, 'destroy'])->name('rooms.destroy');
+});
+Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
+Route::get('/rooms/{id}', [RoomController::class, 'show'])->name('rooms.show');
+
+
+
+
 // GET ASSET PATHS
 Route::get('/avatars/{filename}', function ($filename)
 {
@@ -83,5 +99,12 @@ Route::get('/images/{filename}', function ($filename)
 {
     return response()->file(storage_path('app/public/posts/' . $filename));
 })->name('posts.image-path');
+
+//route to get room banner
+Route::get('/banners/{filename}', function ($filename)
+{
+    return response()->file(storage_path('app/public/banners/' . $filename));
+})->name('rooms.banner-path');
+
 
 require __DIR__.'/auth.php';

@@ -41,5 +41,16 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define("delete-comment", function(User $user, Comment $comment){
             return $user->userable_id == $comment->member_id;
         });
+
+        //create edit room gate
+        Gate::define("edit-room", function(User $user, Room $room){
+            return Moderator::find(   Member::find( $user->userable_id )?->moderator?->id    )?->id  == $room->moderator_id;
+        });
+
+        //create delete room gate
+        Gate::define("delete-room", function(User $user, Room $room){
+            return  Moderator::find(   Member::find( $user->userable_id )?->moderator?->id    )?->id  == $room->moderator_id;
+        });
+
     }
 }

@@ -43,7 +43,10 @@ class ModeratorController extends Controller
      */
     public function show(string $id)
     {
-        return Inertia::render("Moderator/ModeratorDashboard");
+        //TODO show all their rooms
+        return Inertia::render("Moderator/ModeratorDashboard",[
+            "rooms"=>Moderator::find($id)->rooms
+        ]);
     }
 
     /**
