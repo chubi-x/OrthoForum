@@ -1,11 +1,11 @@
 import Navbar from "@/Layouts/Navbar";
 import {useForm} from "@inertiajs/react";
-import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import {useState} from "react";
 import {handleImageChange} from "@/Utils/ImageUploadHelper";
+import Textarea from "@/Components/Textarea";
 
 export default function Edit({auth, post, images}){
      const {data, setData, post:postEdit, processing, errors} = useForm({
@@ -43,15 +43,15 @@ export default function Edit({auth, post, images}){
                         ))
                     }
                     <InputLabel htmlFor="text" value="Edit Post" />
-                    <TextInput
+
+                    <Textarea
                         id="text"
-                        name="text"
-                        value={data.text}
                         className="mt-1 block w-full"
-                        autoComplete="text"
-                        isFocused={true}
-                        onChange={(e) => setData('text', e.target.value)}
+                        value={data.text}
+                        onChange={ (e) => setData('text', e.target.value) }
                         required
+                        isFocused
+                        autoComplete="text"
                     />
                     <InputError message={errors.text} className="mt-2" />
 
