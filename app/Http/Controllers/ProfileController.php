@@ -61,6 +61,7 @@ class ProfileController extends Controller
         $image->type = 'AVATAR';
         $image->imageable()->associate($user);
         $user->avatar()->save($image);
+        $image->save();
 //        dd($user->avatar);
         return Redirect::route('profile.edit');
     }
