@@ -42,7 +42,7 @@ class PostController extends Controller
 
         $this->uploadPostImages($request, $post);
 
-        return Redirect::route("posts.indexByUser");
+        return Redirect::route("posts.indexByUser",[ "id" => $request->all()["userable_id"]]);
     }
 
     /**
@@ -50,7 +50,7 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        $post = Post::find($id);
+        $post = Post::findorFail($id);
         $author = User::find(Member::find($post->member_id)->user->id)->username;
        $comments = $post->comments;
        $images = $post->images;
@@ -103,7 +103,7 @@ class PostController extends Controller
             }
         }
 
-        return Redirect::route("posts.indexByUser");
+        return Redirect::route("posts.indexByUser",["id" => $request->all()["userable_id"]]);
 
     }
 
