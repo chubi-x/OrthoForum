@@ -139,7 +139,7 @@ class PostController extends Controller
      * @return void
      */
     private function uploadPostImages(Request $request, Post $post): void {
-        if (isset($request->all()["images"])) {
+        if (!empty($request->all()["images"])) {
             //validate images
            $request->validate([
                'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
