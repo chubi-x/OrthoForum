@@ -18,7 +18,14 @@ class RoomController extends Controller
      */
     public function index()
     {
-        //
+        //show all rooms
+        $rooms = Room::all();
+        foreach ($rooms as $room){
+            $room->banner = $room->banner_image->path;
+            //add moderator username
+            $room->_moderator = $room->moderator->member->user->username;
+        }
+        return Inertia::render("Rooms/Index", ["rooms" => $rooms]);
     }
 
     /**
