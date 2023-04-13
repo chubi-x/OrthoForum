@@ -1,15 +1,11 @@
 import SecondaryButton from "@/Components/SecondaryButton";
-import InputError from "@/Components/InputError";
-import {Transition} from "@headlessui/react";
 import {useForm} from "@inertiajs/react";
 
-export default function Comment( {comment, user } ) {
+export default function Comment( {comment, auth,moderatorId } ) {
 
     const {
         delete:deleteCommentMethod,
         processing:processingDeleteComment,
-        recentlySuccessful:recentlySuccessfulDeleteComment,
-        errors:deleteCommentsErrors
     } = useForm();
 
     const deleteComment  = (e,commentId) =>{
@@ -20,9 +16,7 @@ export default function Comment( {comment, user } ) {
     }
 
     const canDeleteComment = (comment) => {
-        if(comment?.member_id === user?.userable_id ||
-            user.userable_type === 'App\\Models\\Admin' ||
-            user.userable_type === 'App\\Models\\Moderator'){
+        if(comment?.member_id === auth?.user?.userable_id ||(moderatorId && auth?.moderatorId === moderatorId )){
             //TODO:  notify user if admin or moderator deleted their comment
             return (
                 <>
@@ -30,15 +24,6 @@ export default function Comment( {comment, user } ) {
                                      disabled={processingDeleteComment} className='inline'>
                         Delete Comment
                     </SecondaryButton>
-                    <InputError message={deleteCommentsErrors?.text} className="mt-2"/>
-                    <Transition
-                        show={recentlySuccessfulDeleteComment}
-                        enterFrom="opacity-0"
-                        leaveTo="opacity-0"
-                        className="transition ease-in-out"
-                    >
-                        <p className="text-sm text-black">Comment Deleted.</p>
-                    </Transition>
                 </>
 
             )

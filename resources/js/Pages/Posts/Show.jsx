@@ -10,9 +10,7 @@ import {useState} from "react";
 import ReactTimeAgo from "react-time-ago";
 
 export default function Show({auth, post, author, comments, images, canEditPost, canDeletePost}) {
-    // console.log({auth, post, author, comments, images})
     const  [showComment,setShowComment] = useState(false);
-
     const {get:getEditPost, delete:deletePostMethod , processing:processingPost} = useForm({
     });
     const {
@@ -93,7 +91,7 @@ export default function Show({auth, post, author, comments, images, canEditPost,
     }
 
     return (
-        <Navbar user={auth?.user}>
+        <Navbar user={auth?.user} moderatorId={auth?.moderatorId}>
             <div>
                 <h1>Post</h1>
                 <p>Author: {author}</p>
