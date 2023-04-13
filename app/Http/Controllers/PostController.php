@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Image;
+use App\Models\Like;
 use App\Models\Member;
 use App\Models\Post;
 use App\Models\User;
@@ -21,6 +22,7 @@ class PostController extends Controller
         foreach ($posts as $post){
             $post->images;
             $post->room;
+            $post->likes;
         }
         return Inertia::render("Posts/Index", ["posts" => $posts]);
     }
@@ -69,8 +71,10 @@ class PostController extends Controller
     {
         $post = Post::findorFail($id);
         $author = User::find(Member::find($post->member_id)->user->id)->username;
-       $comments = $post->comments;
-       $images = $post->images;
+        $comments = $post->comments;
+        $images = $post->images;
+        $post->room;
+        $post->likes;
 //       show author name of each comment
         foreach ($comments as $comment){
             $comment->author = User::find(Member::find($comment->member_id)->user->id)->username;
@@ -94,13 +98,38 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        $post =  Post::findorFail($id);
+        $post = Post::findorFail($id);
         //check if user is the author of the post using gate allows method
         if(!Gate::allows('edit-post', $post)){
             abort(403, 'You cannot edit this post');
         }
         $images = $post->images;
         return Inertia::render("Posts/Edit", ["post" => $post, "images" => $images]);
+    }
+
+    /*
+     * Like post
+     */
+    public function like(Request $request, string $id)
+    {
+        $post = Post::findorFail($id);
+        $like = new Like;
+        // attach member id to post likes
+        $member = Member::find($request->user()->userable_id);
+        $like->member()->associate($member);
+        $like->post()->associate($post);
+        $like->save();
+        return Redirect::route("posts.show", ["id" => $id]);
+    }
+
+    /*
+     * Unlike post
+     */
+    public function unlike(Request $request, string $id)
+    {
+        $like = Like::where("post_id", $id)->where("member_id", $request->user()->userable_id)->first();
+        $like->delete();
+        return Redirect::route("posts.show", ["id" => $id]);
     }
 
     /**

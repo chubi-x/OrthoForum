@@ -2,16 +2,20 @@ import Navbar from "@/Layouts/Navbar";
 import Comment from "@/Pages/Posts/Partials/Comment";
 import SecondaryButton from "@/Components/SecondaryButton";
 import {Transition} from "@headlessui/react";
-import {useForm} from "@inertiajs/react";
+import {Link, useForm} from "@inertiajs/react";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 import {useState} from "react";
 import ReactTimeAgo from "react-time-ago";
+import emptyHeart from "../../../images/empty-heart.svg";
+import filledHeart from "../../../images/filled-heart.svg";
 
 export default function Show({auth, post, author, comments, images, canEditPost, canDeletePost}) {
     const  [showComment,setShowComment] = useState(false);
-    const {get:getEditPost, delete:deletePostMethod , processing:processingPost} = useForm({
+    const [postIsLiked, setPostIsLiked] = useState(false);
+    const postIsLikedByUser = post?.likes?.find((like) => like.member_id === auth?.user?.id);
+    const {post:postMethod, delete:deleteMethod , processing:processingPost} = useForm({
     });
     const {
         data:commentsData, setData:setCommentsData,
@@ -26,7 +30,7 @@ export default function Show({auth, post, author, comments, images, canEditPost,
     });
 
     const deletePost = (postId) => {
-        deletePostMethod(route('posts.destroy', [postId]));
+        deleteMethod(route('posts.destroy', [postId]));
     };
     const toggleLikePost = (postId) => {
         if(auth.user){
@@ -53,9 +57,12 @@ export default function Show({auth, post, author, comments, images, canEditPost,
         if(canEditPost) {
            return (
                 <>
-                    <SecondaryButton onClick={() => editPost(post.id)}
+                    <SecondaryButton
                                      disabled={processingPost} className='inline'>
-                        Edit Post
+                        <Link href={route('posts.edit', [post.id])}>
+                            Edit Post
+                        </Link>
+
                     </SecondaryButton>
                 </>
             )
