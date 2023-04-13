@@ -94,7 +94,7 @@ export default function Show({auth, post, author, comments, images, canEditPost,
         <Navbar user={auth?.user} moderatorId={auth?.moderatorId}>
             <div>
                 <h1>Post</h1>
-                <p>Author: {author}</p>
+                <p>Author: {author === auth?.user?.username ? "Me" : author }</p>
                 <div>
                     <h2> Text:  {post?.text} </h2>
                     <p>Likes: {post?.likes}</p>
