@@ -90,7 +90,7 @@ const showLeaveButton = () => {
                     ))}
                 </ul>
 
-               { isMember &&  <SecondaryButton className='inline'>
+               { (isMember || isModerator ) &&  <SecondaryButton className='inline'>
                    <Link href={route('posts.create', {
                        room_id: room.id
                    })}>
