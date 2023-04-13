@@ -6,11 +6,13 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import {useState} from "react";
 import {handleImageChange} from "@/Utils/ImageUploadHelper";
 import Textarea from "@/Components/Textarea";
+import TextInput from "@/Components/TextInput";
 
 export default function Edit({auth, post, images}){
      const {data, setData, post:postEdit, processing, errors} = useForm({
+            title: post.title,
          images: [],
-         text: post.text,
+         body: post.body,
      });
     const [countImages, setCountImages] = useState([]);
      const submit = (e) => {
@@ -42,18 +44,30 @@ export default function Edit({auth, post, images}){
                             <input key={index} type="file" name={`post-image-${index}`} onChange={ (e)=> handleImageChange(e, data, setData) } />
                         ))
                     }
-                    <InputLabel htmlFor="text" value="Edit Post" />
-
-                    <Textarea
-                        id="text"
+                    <InputLabel htmlFor="title" value="Title" />
+                    <TextInput
+                        id="title"
                         className="mt-1 block w-full"
-                        value={data.text}
-                        onChange={ (e) => setData('text', e.target.value) }
+                        value={data.title}
+                        onChange={ (e) => setData('title', e.target.value) }
                         required
                         isFocused
-                        autoComplete="text"
+                        autoComplete="title"
                     />
-                    <InputError message={errors.text} className="mt-2" />
+                    <InputError message={errors.title} className="mt-2" />
+
+                    <InputLabel htmlFor="body" value="Body" />
+
+                    <Textarea
+                        id="body"
+                        className="mt-1 block w-full"
+                        value={data.body}
+                        onChange={ (e) => setData('body', e.target.value) }
+                        required
+                        isFocused
+                        autoComplete="body"
+                    />
+                    <InputError message={errors.body} className="mt-2" />
 
                     <PrimaryButton className="ml-4" disabled={processing}>
                         Edit Post
