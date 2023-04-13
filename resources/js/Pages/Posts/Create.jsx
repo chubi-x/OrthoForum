@@ -28,7 +28,7 @@ export default function Create() {
         countImages.length <4 ? setCountImages(prev=>( [...prev, 0 ] ) ) : alert("You can't add more than 4 images");
     }
     return (
-        <Navbar user={user}>
+        <Navbar user={user} moderatorId={auth?.moderatorId}>
             <div className='w-1/2 mx-auto'>
                 <form onSubmit={submit} className="mt-6 space-y-6">
                     <div>
