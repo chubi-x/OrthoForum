@@ -28,7 +28,7 @@ export default function Edit({auth, post, images}){
         countImages.length < 4 - images?.length ? setCountImages(prev=>( [...prev, 0 ] ) ) : alert("You can't add more than 4 images");
     }
     return (
-        <Navbar user={auth.user}>
+        <Navbar user={auth?.user} moderatorId={auth?.moderatorId}>
             <div>
                 <h1>Edit Post</h1>
 
