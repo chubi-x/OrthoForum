@@ -13,7 +13,7 @@ export default function Index({auth,posts}){
     const headerMessage = memberId === urlMemberId ? 'Your Posts' : 'Posts';
     const noPostsMessage = memberId === urlMemberId ? 'You have no posts.' : 'This member has no posts.';
     return (
-        <Navbar user={auth.user}>
+        <Navbar user={auth.user} moderatorId={auth?.moderatorId}>
             <div>
                 <h1>Posts</h1>
                 {
