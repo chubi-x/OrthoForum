@@ -1,6 +1,6 @@
 import Navbar from "@/Layouts/Navbar";
 import SecondaryButton from "@/Components/SecondaryButton";
-import {useForm} from "@inertiajs/react";
+import {Link, useForm} from "@inertiajs/react";
 
 export default function Show({auth, room,isModerator,moderator,posts }){
     const {get, delete:deleteRoomMethod, processing:processingRoom} = useForm();
@@ -38,7 +38,32 @@ export default function Show({auth, room,isModerator,moderator,posts }){
                <p>Room Moderator: {moderator}  </p>
                {showEditButton()}
                 {showDeleteButton()}
-                <img src={route('rooms.banner-path',[room.banner])} alt={room.name + ' banner'} />
+
+
+                <img className="w-48" src={route('rooms.banner-path',[room.banner])} alt={room.name + ' banner'} />
+
+                <h2> {posts.length > 0 ? 'Posts' : 'No Post yet'}  </h2>
+                <ul>
+                    {posts.map((post) => (
+
+                        <li key={post.id}>
+                            <Link href={route('posts.show', [post.id])}>
+                                <u>
+                                {post.text}
+                                </u>
+                            </Link>
+
+                        </li>
+                    ))}
+                </ul>
+
+               { auth?.user &&  <SecondaryButton className='inline'>
+                   <Link href={route('posts.create', {
+                       room_id: room.id
+                   })}>
+                       New Post
+                   </Link>
+               </SecondaryButton>}
            </div>
        </Navbar>
     )
