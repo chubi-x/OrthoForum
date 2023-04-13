@@ -75,7 +75,10 @@ Route::middleware(['auth','verified','isModerator'])->group(function () {
 });
 
 //ROOM ROUTES
-
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('/rooms/{id}/join', [RoomController::class, 'join'])->name('rooms.join');
+    Route::post('/rooms/{id}/leave', [RoomController::class, 'leave'])->name('rooms.leave');
+});
 Route::middleware(['auth', 'isModerator'])->group(function () {
     Route::get('/rooms/create', [RoomController::class, 'create'])->name('rooms.create');
     Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');

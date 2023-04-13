@@ -2,34 +2,53 @@ import Navbar from "@/Layouts/Navbar";
 import SecondaryButton from "@/Components/SecondaryButton";
 import {Link, useForm} from "@inertiajs/react";
 
-export default function Show({auth, room,isModerator,moderator,posts }){
-    const {get, delete:deleteRoomMethod, processing:processingRoom} = useForm();
+export default function Show({auth, room, isModerator, moderator, posts, members}){
+    const {post, delete:deleteRoomMethod, processing:processingRoom} = useForm();
     const deleteRoom = (roomId) => {
         deleteRoomMethod(route('rooms.destroy', [roomId]));
     };
-    const editRoom = (roomId) => {
-        get( route('rooms.edit', [roomId]) );
+    const joinRoom = (roomId) => {
+     auth.user ? post( route('rooms.join', [roomId]) ) : alert('You must be logged in to join a room') ;
+    }
+    const leaveRoom = (roomId) => {
+        post( route('rooms.leave', [roomId]) );
     }
     const showEditButton = () => {
         if(isModerator){
-            return <SecondaryButton onClick={() => editRoom(room.id)}
-                                    disabled={processingRoom} className='inline'>
-                Edit Room Details
+            return <SecondaryButton disabled={processingRoom} className='inline'>
+                <Link href={route('rooms.edit', [room?.id])}>
+                    Edit Room Details
+                </Link>
             </SecondaryButton>;
         }
-        return null;
     }
     const showDeleteButton = () => {
         if(isModerator){
            return <SecondaryButton onClick={() => deleteRoom(room.id)}
-                             disabled={processingRoom} className='inline'>
+                         disabled={processingRoom} className='inline'>
                 Delete Room
             </SecondaryButton>
         }
-        return null;
     }
+const showJoinButton = () => {
+    if(!isModerator && !members?.find((member) => member.id === auth.user.id)){
+        return <SecondaryButton onClick={() => joinRoom(room.id)}
+                    disabled={processingRoom} className='inline'>
+            Join Room
+        </SecondaryButton>
+    }
+}
+const showLeaveButton = () => {
+    if(!isModerator && (auth.user && members?.find((member) => member.id === auth.user.id))  ){
+        return <SecondaryButton onClick={() => leaveRoom(room.id)}
+                    disabled={processingRoom} className='inline'>
+            Leave Room
+        </SecondaryButton>
+    }
+}
+
     return (
-       <Navbar user={auth.user} moderatorId={auth?.moderatorId}>
+       <Navbar user={auth?.user} moderatorId={auth?.moderatorId}>
            <div>
                <h1>Room</h1>
                 <p>Room name: {room.name}</p>
@@ -38,7 +57,20 @@ export default function Show({auth, room,isModerator,moderator,posts }){
                <p>Room Moderator: {moderator}  </p>
                {showEditButton()}
                 {showDeleteButton()}
-
+                {showJoinButton()}
+                {showLeaveButton()}
+               <h2>{members?.length > 0 ? 'Members' : 'No Members yet'}</h2>
+                <ul>
+                    {members?.map((member) => (
+                        <li key={member.id}>
+                            {/*<Link> /!*route('users.show', [member.id]) *!/*/}
+                                <u>
+                                    {member.user.username}
+                                </u>
+                            {/*</Link>*/}
+                        </li>
+                    ))}
+                </ul>
 
                 <img className="w-48" src={route('rooms.banner-path',[room.banner])} alt={room.name + ' banner'} />
 

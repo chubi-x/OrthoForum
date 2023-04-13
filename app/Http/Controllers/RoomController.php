@@ -63,6 +63,24 @@ class RoomController extends Controller
         return Redirect::route("rooms.show",["id" => $room->id]);
     }
 
+    /*
+     * Join a room
+     */
+    public function join(Request $request, string $id)
+    {
+        $room = Room::findorFail($id);
+        $room->members()->attach($request->user()->userable_id);
+        return Redirect::route("rooms.show",["id" => $room->id]);
+    }
+    /*
+     * Leave a room
+     */
+    public function leave(Request $request, string $id)
+    {
+        $room = Room::findorFail($id);
+        $room->members()->detach($request->user()->userable_id);
+        return Redirect::route("rooms.show",["id" => $room->id]);
+    }
     /**
      * Display the specified resource.
      */
@@ -79,12 +97,18 @@ class RoomController extends Controller
         //add posts
         $posts = $room->posts;
         foreach ($posts as $post){
-            $post->user = $post->member->user->username;
+            $post->member->user->makeHidden(['email_verified_at','created_at','updated_at','password','remember_token','userable_type']);
+        }
+        $members = $room->members;
+        foreach ($members as $member){
+           $member->user->makeHidden(['email_verified_at','created_at','updated_at','password','remember_token','userable_type']);
         }
         return Inertia::render("Rooms/Show",["room" => $room,
             "isModerator" => $isModerator,
             "moderator" => $moderator,
-            "posts" => $posts]);
+            "posts" => $posts,
+            "members" => $members
+        ]);
     }
 
     /**
