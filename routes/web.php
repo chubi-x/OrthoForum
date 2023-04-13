@@ -87,8 +87,6 @@ Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
 Route::get('/rooms/{id}', [RoomController::class, 'show'])->name('rooms.show');
 
 
-
-
 // GET ASSET PATHS
 Route::get('/avatars/{filename}', function ($filename)
 {
