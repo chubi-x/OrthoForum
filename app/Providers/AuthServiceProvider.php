@@ -40,7 +40,9 @@ class AuthServiceProvider extends ServiceProvider
         });
         //create delete comment gate
         Gate::define("delete-comment", function(User $user, Comment $comment){
-            return $user->userable_id == $comment->member_id;
+            return $user->userable_id == $comment->member_id || //user owns the comment
+                // user is moderator and comment was made in one of their rooms
+                (  Moderator::find(   Member::find( $user->userable_id )?->moderator?->id    )?->rooms()?->find($comment?->post?->room?->id)?->exists())  ;
         });
 
         //create edit room gate
