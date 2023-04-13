@@ -2,9 +2,8 @@ import Navbar from "@/Layouts/Navbar";
 import SecondaryButton from "@/Components/SecondaryButton";
 import {useForm} from "@inertiajs/react";
 
-export default function Show({auth, room }){
+export default function Show({auth, room,isModerator,moderator,posts }){
     const {get, delete:deleteRoomMethod, processing:processingRoom} = useForm();
-
     const deleteRoom = (roomId) => {
         deleteRoomMethod(route('rooms.destroy', [roomId]));
     };
@@ -12,7 +11,7 @@ export default function Show({auth, room }){
         get( route('rooms.edit', [roomId]) );
     }
     const showEditButton = () => {
-        if(auth?.moderatorId && auth?.moderatorId === room.moderator_id){
+        if(isModerator){
             return <SecondaryButton onClick={() => editRoom(room.id)}
                                     disabled={processingRoom} className='inline'>
                 Edit Room Details
@@ -21,7 +20,7 @@ export default function Show({auth, room }){
         return null;
     }
     const showDeleteButton = () => {
-        if(auth?.moderatorId && auth?.moderatorId === room.moderator_id){
+        if(isModerator){
            return <SecondaryButton onClick={() => deleteRoom(room.id)}
                              disabled={processingRoom} className='inline'>
                 Delete Room
@@ -36,6 +35,7 @@ export default function Show({auth, room }){
                 <p>Room name: {room.name}</p>
                 <p>Room description: {room.description}</p>
                 <p>Room type: {room.type}</p>
+               <p>Room Moderator: {moderator}  </p>
                {showEditButton()}
                 {showDeleteButton()}
                 <img src={route('rooms.banner-path',[room.banner])} alt={room.name + ' banner'} />

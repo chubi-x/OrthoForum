@@ -63,7 +63,21 @@ class RoomController extends Controller
     {
         $room = Room::findorFail($id);
         $room->banner = $room->banner_image->path;
-        return Inertia::render("Rooms/Show",["room" => $room]);
+        // check if user is the moderator of the room
+        $isModerator = Gate::allows('edit-room', $room);
+        //add moderator username
+//        dd($room->_moderator);
+        $moderator = $room->moderator->member->user->username;
+
+        //add posts
+        $posts = $room->posts;
+        foreach ($posts as $post){
+            $post->user = $post->member->user->username;
+        }
+        return Inertia::render("Rooms/Show",["room" => $room,
+            "isModerator" => $isModerator,
+            "moderator" => $moderator,
+            "posts" => $posts]);
     }
 
     /**
