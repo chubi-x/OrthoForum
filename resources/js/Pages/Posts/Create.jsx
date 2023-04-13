@@ -6,12 +6,14 @@ import Textarea from "@/Components/Textarea";
 import Navbar from "@/Layouts/Navbar";
 import {useEffect, useState} from "react";
 import {handleImageChange} from "@/Utils/ImageUploadHelper";
+import TextInput from "@/Components/TextInput";
 
 export default function Create({auth}) {
     const user = auth?.user;
     const { data, setData, post, errors, processing } = useForm({
+        title: '',
         images: [],
-        text: '',
+        body: '',
         userable_id: '',
         room_id: new URLSearchParams(location.search).get('room_id'),
     });
@@ -48,18 +50,29 @@ export default function Create({auth}) {
 
                         }
 
-                        <InputLabel htmlFor="post" value="Post" />
-
-                        <Textarea
-                            id="post"
+                        <InputLabel htmlFor="title" value="Title" />
+                        <TextInput
+                            id="title"
                             className="mt-1 block w-full"
-                            value={data.text}
-                            onChange={ (e) => setData('text', e.target.value) }
+                            value={data.title}
+                            onChange={ (e) => setData('title', e.target.value) }
                             required
                             isFocused
-                            autoComplete="text"
+                            autoComplete="title"
                         />
-                        <InputError className="mt-2" message={errors.text} />
+                        <InputError className="mt-2" message={errors.title} />
+                        <InputLabel htmlFor="body" value="Body" />
+                        <Textarea
+                            id="body"
+                            className="mt-1 block w-full"
+                            value={data.body}
+                            onChange={ (e) => setData('body', e.target.value) }
+                            required
+                            isFocused
+                            autoComplete="body"
+                        />
+                        <InputError className="mt-2" message={errors.body} />
+
                     </div>
 
 

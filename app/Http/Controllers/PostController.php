@@ -39,10 +39,12 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            "text" => "required",
+            "title" => "required",
+            "body" => "required",
         ]);
         $post = new Post;
-        $post->fill($request->all(["text"]));
+        $post->title = $request->all()["title"];
+        $post->body = $request->all()["body"];
         $post->member()->associate($request->all()["userable_id"]);
         //check if room id is not null and associate it
         if ($request->all()["room_id"] != null){
@@ -107,14 +109,16 @@ class PostController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            "text" => "required",
+            "body" => "required",
         ]);
         $post = Post::findorFail($id);
         //check if user is the author of the post using gate allows method
         if(!Gate::allows('edit-post', $post)){
             abort(403, 'You cannot edit this post');
         }
-       $post->fill($request->all(["text"]));
+        $post->title = $request->all()["title"];
+        $post->body = $request->all(["body"]);
+        $post->save();
        $this->uploadPostImages($request, $post);
         Return Redirect::route("posts.show", ["id" => $id]);
     }

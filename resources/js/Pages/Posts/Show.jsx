@@ -96,7 +96,8 @@ export default function Show({auth, post, author, comments, images, canEditPost,
                 <h1>Post</h1>
                 <p>Author: {author === auth?.user?.username ? "Me" : author }</p>
                 <div>
-                    <h2> Text:  {post?.text} </h2>
+                    <h2> Title:  {post?.title} </h2>
+                    <h2> Body:  {post?.body} </h2>
                     <p>Likes: {post?.likes}</p>
                     <p>Created: { <ReactTimeAgo date={new Date(post?.created_at)} locale="en-US"/>  }</p>
                     <p>Last Updated: { <ReactTimeAgo date={ new Date(post?.updated_at)} locale="en-US"/>  }</p>

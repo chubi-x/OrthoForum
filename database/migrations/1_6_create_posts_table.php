@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->longText("text");
+            $table->string("title");
+            $table->longText("body");
             $table->bigInteger("likes")->default(0);
             $table->foreignId("member_id")->constrained()->restrictOnDelete()->cascadeOnUpdate();
             $table->foreignId('room_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();

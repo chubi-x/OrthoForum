@@ -29,7 +29,7 @@ export default function Index({auth,posts}){
                         <h2>
                             <Link href={route('posts.show',[post.id])}>
                                 <u>
-                                    {post.text}
+                                    {post.title}
                                 </u>
                             </Link>
                         </h2>
