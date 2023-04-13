@@ -4,7 +4,7 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import {useEffect} from "react";
 
 export default function Dashboard({ auth,flash }) {
-    const {post,get} = useForm();
+    const {post} = useForm();
     //TODO: install react tostify and use to flash messages
     useEffect(() => {
         if(flash?.moderatorError){
@@ -18,9 +18,6 @@ export default function Dashboard({ auth,flash }) {
                 alert("You are now a moderator!");
             }
         });
-    }
-    const goToModeratorDashboard = () => {
-        get(route('moderator.show',{id:auth?.moderatorId}));
     }
     return (
         <Navbar
@@ -48,8 +45,10 @@ export default function Dashboard({ auth,flash }) {
 
                         {
                             auth?.moderatorId &&
-                            <PrimaryButton onClick={goToModeratorDashboard}>
+                            <PrimaryButton >
+                                <Link href={route('moderator.show',{id:auth?.moderatorId})}>
                                     Go to Moderator Dashboard
+                                </Link>
                             </PrimaryButton>
                         }
                     </div>
