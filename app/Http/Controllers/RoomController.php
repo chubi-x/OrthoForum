@@ -92,7 +92,11 @@ class RoomController extends Controller
      */
     public function edit(string $id)
     {
-        return Inertia::render("Rooms/Edit",["room" => Room::findorFail($id)]);
+        $room = Room::findorFail($id);
+        if(!Gate::allows('edit-room', $room)) {
+            abort(403, 'You cannot edit this room as you are not the moderator');
+        }
+        return Inertia::render("Rooms/Edit",["room" => $room]);
     }
 
     /**
