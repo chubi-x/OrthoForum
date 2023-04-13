@@ -114,7 +114,7 @@ export default function Show({auth, post, author, comments, images, canEditPost,
                         comments?.map((comment) => (
                             <div key={comment?.id} className='m-10 bg-blue-200'>
 
-                            <Comment comment={comment} user={auth?.user}/>
+                            <Comment comment={comment} moderatorId={post?.room?.moderator_id} auth={auth}/>
                             </div>
                         ))
                     }
