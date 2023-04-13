@@ -82,9 +82,11 @@ const showLeaveButton = () => {
                         <li key={post.id}>
                             <Link href={route('posts.show', [post.id])}>
                                 <u>
-                                {post.text}
+                                {post.title + " "}
                                 </u>
                             </Link>
+
+                            by : {post.member.user.username}
 
                         </li>
                     ))}
