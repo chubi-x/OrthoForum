@@ -28,8 +28,16 @@ export default function Show({auth, post, author, comments, images, canEditPost,
     const deletePost = (postId) => {
         deletePostMethod(route('posts.destroy', [postId]));
     };
-    const editPost = (postId) => {
-        getEditPost( route('posts.edit', [postId]) );
+    const toggleLikePost = (postId) => {
+        if(auth.user){
+          postIsLiked ?  setPostIsLiked(false) : setPostIsLiked(true);
+            // if post is liked, send post request to unlike post
+            // if post is not liked, send post request to like post
+            postIsLiked || postIsLikedByUser ? postMethod( route ('posts.unlike', [postId]) ) :
+                postMethod( route('posts.like', [postId]) );
+        }
+        else  alert("You need to be logged in to like a post");
+
     }
     const postNewComment = (e) => {
         e.preventDefault();
@@ -98,9 +106,13 @@ export default function Show({auth, post, author, comments, images, canEditPost,
                 <div>
                     <h2> Title:  {post?.title} </h2>
                     <h2> Body:  {post?.body} </h2>
-                    <p>Likes: {post?.likes}</p>
+                    <p>Likes: {post?.likes.length}</p>
                     <p>Created: { <ReactTimeAgo date={new Date(post?.created_at)} locale="en-US"/>  }</p>
                     <p>Last Updated: { <ReactTimeAgo date={ new Date(post?.updated_at)} locale="en-US"/>  }</p>
+                    <p>Room: {post?.room?.name}</p>
+                    <button onClick={()=> toggleLikePost(post.id)}>
+                        <img className="w-6" src={ postIsLiked || postIsLikedByUser ? filledHeart : emptyHeart } alt="like" />
+                    </button>
                     {showEditButton()}
                     {showDeleteButton()}
 

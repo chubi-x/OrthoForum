@@ -38,6 +38,10 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     //    update post
     Route::post('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
+    //like post
+    Route::post('/posts/{id}/like', [PostController::class, 'like'])->name('posts.like');
+    //unlike post
+    Route::post('/posts/{id}/unlike', [PostController::class, 'unlike'])->name('posts.unlike');
     //    edit post view
     Route::get('/posts/{id}/edit', [PostController::class, 'edit'])->name('posts.edit');
     //    edit post

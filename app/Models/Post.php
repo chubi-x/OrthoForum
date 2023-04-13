@@ -26,4 +26,7 @@ class Post extends Model
     public function room():BelongsTo{
         return $this->belongsTo(Room::class);
     }
+    public function likes():HasMany{
+        return $this->hasMany(Like::class);
+    }
 }
