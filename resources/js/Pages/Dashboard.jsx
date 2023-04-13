@@ -3,7 +3,8 @@ import {Head, Link, useForm} from '@inertiajs/react';
 import PrimaryButton from "@/Components/PrimaryButton";
 import {useEffect} from "react";
 
-export default function Dashboard({ auth,flash }) {
+export default function Dashboard({ auth,flash,member }) {
+    console.log(member);
     const {post} = useForm();
     //TODO: install react tostify and use to flash messages
     useEffect(() => {
@@ -52,7 +53,31 @@ export default function Dashboard({ auth,flash }) {
                             </PrimaryButton>
                         }
                     </div>
+                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mt-10">
+                        <div className="p-6 text-gray-900 dark:text-gray-100">
+                            <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Rooms</h2>
+                            <ul>
+                                { member?.rooms.length > 0 ?  member?.rooms?.map((room) => {
+                                    return <li key={room.id}>
+                                        <Link href={route('rooms.show',[room.id])}>
+                                            {room.name}
+                                        </Link>
+                                    </li>
+                                })
+                                :
+                                    <div>
+                                        <p>You are not a member of any room yet</p>
+                                        <PrimaryButton>
+                                        <Link href={route('rooms.index')}>
+                                            Join a room
+                                        </Link>
+                                        </PrimaryButton>
 
+                                    </div>
+                                }
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </Navbar>

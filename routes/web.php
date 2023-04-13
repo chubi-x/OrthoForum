@@ -5,6 +5,8 @@ use App\Http\Controllers\ModeratorController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
+use App\Models\Member;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -26,8 +28,14 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+Route::get('/dashboard', function (Request $request) {
+    $member = Member::find($request->user()->userable_id);
+    $member->rooms;
+
+    return Inertia::render('Dashboard', [
+        'member' => $member
+
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // PRIVATE POSTS ROUTES
