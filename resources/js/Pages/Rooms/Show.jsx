@@ -4,6 +4,7 @@ import {Link, useForm} from "@inertiajs/react";
 
 export default function Show({auth, room, isModerator, moderator, posts, members}){
     const {post, delete:deleteRoomMethod, processing:processingRoom} = useForm();
+    const isMember =(auth.user && members?.find((member) => member.id === auth.user.id));
     const deleteRoom = (roomId) => {
         deleteRoomMethod(route('rooms.destroy', [roomId]));
     };
@@ -31,7 +32,7 @@ export default function Show({auth, room, isModerator, moderator, posts, members
         }
     }
 const showJoinButton = () => {
-    if(!isModerator && !members?.find((member) => member.id === auth.user.id)){
+    if(!isModerator && !isMember ){
         return <SecondaryButton onClick={() => joinRoom(room.id)}
                     disabled={processingRoom} className='inline'>
             Join Room
@@ -39,7 +40,7 @@ const showJoinButton = () => {
     }
 }
 const showLeaveButton = () => {
-    if(!isModerator && (auth.user && members?.find((member) => member.id === auth.user.id))  ){
+    if(!isModerator && isMember  ){
         return <SecondaryButton onClick={() => leaveRoom(room.id)}
                     disabled={processingRoom} className='inline'>
             Leave Room
@@ -89,7 +90,7 @@ const showLeaveButton = () => {
                     ))}
                 </ul>
 
-               { auth?.user &&  <SecondaryButton className='inline'>
+               { isMember &&  <SecondaryButton className='inline'>
                    <Link href={route('posts.create', {
                        room_id: room.id
                    })}>
