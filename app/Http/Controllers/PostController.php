@@ -44,10 +44,20 @@ class PostController extends Controller
         $post = new Post;
         $post->fill($request->all(["text"]));
         $post->member()->associate($request->all()["userable_id"]);
+        //check if room id is not null and associate it
+        if ($request->all()["room_id"] != null){
+            $post->room()->associate($request->all()["room_id"]);
+        }
         $post->save();
         $this->uploadPostImages($request, $post);
 
-        return Redirect::route("posts.indexByUser",[ "id" => $request->all()["userable_id"]]);
+        //if room is null, redirect to user's posts
+        if ($request->all()["room_id"] == null){
+            return Redirect::route("posts.indexByUser",[ "id" => $request->user()->userable_id]);
+        }
+        //else redirect to room's posts
+        return Redirect::route("rooms.show", ["id" => $request->all()["room_id"]]);
+
     }
 
     /**
@@ -129,7 +139,7 @@ class PostController extends Controller
             }
         }
 
-        return Redirect::route("posts.indexByUser",["id" => $request->all()["userable_id"]]);
+        return Redirect::route("posts.indexByUser",["id" => $request->user()->userable_id]);
 
     }
 

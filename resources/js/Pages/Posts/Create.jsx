@@ -1,18 +1,19 @@
 import InputLabel from "@/Components/InputLabel";
 import InputError from "@/Components/InputError";
-import {useForm, usePage} from "@inertiajs/react";
+import {useForm} from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Textarea from "@/Components/Textarea";
 import Navbar from "@/Layouts/Navbar";
 import {useEffect, useState} from "react";
 import {handleImageChange} from "@/Utils/ImageUploadHelper";
 
-export default function Create() {
-    const user = usePage().props.auth.user;
+export default function Create({auth}) {
+    const user = auth?.user;
     const { data, setData, post, errors, processing } = useForm({
         images: [],
         text: '',
-        userable_id: ''
+        userable_id: '',
+        room_id: new URLSearchParams(location.search).get('room_id'),
     });
     const [countImages, setCountImages] = useState([]);
 
