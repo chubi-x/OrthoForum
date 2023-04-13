@@ -16,9 +16,11 @@ class PostController extends Controller
 {
     public function indexByUser(string $id)
     {
-        $posts = Post::all()-> where("member_id", $id);
+        $posts = Post::where("member_id", $id)->get();
+//        dd($posts);
         foreach ($posts as $post){
-            $post->images = $post->images;
+            $post->images;
+            $post->room;
         }
         return Inertia::render("Posts/Index", ["posts" => $posts]);
     }
