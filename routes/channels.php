@@ -22,3 +22,7 @@ Broadcast::channel('post-liked-channel.{id}', function ($user, $id) {
 Broadcast::channel('moderator-deleted-post-channel.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
+
+Broadcast::channel('commented-on-post-channel.{id}', function ($user, $id) {
+    return (int) $user->id === (int) $id;
+});

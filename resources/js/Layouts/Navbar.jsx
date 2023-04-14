@@ -16,6 +16,10 @@ export default function Navbar({ user, moderatorId, header, children }) {
         .listen('ModeratorDeletedPost', (event) => {
             console.log(event);
         });
+    Echo.private(`commented-on-post-channel.${user.id}`)
+        .listen('CommentedOnPost', (event) => {
+            console.log(event);
+        });
 
     return (
         <div className="min-h-screen bg-gray-100">
