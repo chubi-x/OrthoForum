@@ -8,6 +8,11 @@ import {Link} from '@inertiajs/react';
 export default function Navbar({ user, moderatorId, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
+    Echo.private(`post-liked-channel.${user.id}`)
+        .listen('PostLiked', (event) => {
+            console.log(event);
+        });
+
     return (
         <div className="min-h-screen bg-gray-100">
             <nav className="bg-white border-b border-gray-100 ">

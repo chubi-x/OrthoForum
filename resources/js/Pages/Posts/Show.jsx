@@ -13,7 +13,7 @@ import filledHeart from "../../../images/filled-heart.svg";
 
 export default function Show({auth, post, author, comments, images, canEditPost, canDeletePost}) {
     const  [showComment,setShowComment] = useState(false);
-    const [postIsLiked, setPostIsLiked] = useState(false);
+    const [likePost, setLikePost] = useState(false);
     const postIsLikedByUser = post?.likes?.find((like) => like.member_id === auth?.user?.id);
     const {post:postMethod, delete:deleteMethod , processing:processingPost} = useForm({
     });
@@ -34,10 +34,10 @@ export default function Show({auth, post, author, comments, images, canEditPost,
     };
     const toggleLikePost = (postId) => {
         if(auth.user){
-          postIsLiked ?  setPostIsLiked(false) : setPostIsLiked(true);
+          likePost ?  setLikePost(false) : setLikePost(true);
             // if post is liked, send post request to unlike post
             // if post is not liked, send post request to like post
-            postIsLiked || postIsLikedByUser ? postMethod( route ('posts.unlike', [postId]) ) :
+            likePost || postIsLikedByUser ? postMethod( route ('posts.unlike', [postId]) ) :
                 postMethod( route('posts.like', [postId]) );
         }
         else  alert("You need to be logged in to like a post");
@@ -118,7 +118,7 @@ export default function Show({auth, post, author, comments, images, canEditPost,
                     <p>Last Updated: { <ReactTimeAgo date={ new Date(post?.updated_at)} locale="en-US"/>  }</p>
                     <p>Room: {post?.room?.name}</p>
                     <button onClick={()=> toggleLikePost(post.id)}>
-                        <img className="w-6" src={ postIsLiked || postIsLikedByUser ? filledHeart : emptyHeart } alt="like" />
+                        <img className="w-6" src={ likePost || postIsLikedByUser ? filledHeart : emptyHeart } alt="like" />
                     </button>
                     {showEditButton()}
                     {showDeleteButton()}

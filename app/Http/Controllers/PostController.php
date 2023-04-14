@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostLiked;
 use App\Models\Image;
 use App\Models\Like;
 use App\Models\Member;
@@ -119,6 +120,8 @@ class PostController extends Controller
         $like->member()->associate($member);
         $like->post()->associate($post);
         $like->save();
+        //broadcast event
+        PostLiked::dispatch( User::find( $post->member->user->id ) , $request->user()->username, $post);
         return Redirect::route("posts.show", ["id" => $id]);
     }
 
@@ -128,7 +131,7 @@ class PostController extends Controller
     public function unlike(Request $request, string $id)
     {
         $like = Like::where("post_id", $id)->where("member_id", $request->user()->userable_id)->first();
-        $like->delete();
+        $like?->delete();
         return Redirect::route("posts.show", ["id" => $id]);
     }
 
