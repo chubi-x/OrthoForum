@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ModeratorDeletedPost;
 use App\Events\PostLiked;
 use App\Models\Image;
 use App\Models\Like;
 use App\Models\Member;
 use App\Models\Post;
+use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -160,11 +162,26 @@ class PostController extends Controller
      */
     public function destroy(Request $request , string $id)
     {
+        $user = $request->user();
+        $member = Member::find($user->userable_id);
+        $moderator =  $member->moderator()->exists() ? $member->moderator()->first() : null;
         $post = Post::findorFail($id);
+        $postOwner = User::find( $post->member->user->id );
         //check if user is the author of the post using gate allows method
-        if(!Gate::allows('delete-post', $post)){
+        if(!Gate::allows('delete-post', $post) ) {
             abort(403, 'You cannot delete this post');
         }
+        //check if post is in a room
+        if($post->room_id != null){
+            //check if moderator id and room moderator id are the same
+            $room = Room::find($post->room_id);
+            if($moderator != null && $room->moderator_id == $moderator->id){
+                $moderatorUser = User::find($moderator->member->user->id);
+                $post->room()->dissociate();
+                ModeratorDeletedPost::dispatch($moderatorUser, $room, $postOwner, $post);
+            }
+        }
+        $post->comments()->delete();
         $post->delete();
         $images = Image::all()->where("imageable_id", $id)->where("type", "POST");
         if($images->count() > 0){

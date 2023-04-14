@@ -4,9 +4,10 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import {useEffect} from "react";
 
 export default function Dashboard({ auth,flash,member }) {
-    console.log(member);
+
+    // postLikedEvent();
     const {post} = useForm();
-    //TODO: install react tostify and use to flash messages
+    //TODO: install react toastify and use to flash messages
     useEffect(() => {
         if(flash?.moderatorError){
             alert(flash.moderatorError);

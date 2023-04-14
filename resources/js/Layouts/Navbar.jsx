@@ -12,6 +12,10 @@ export default function Navbar({ user, moderatorId, header, children }) {
         .listen('PostLiked', (event) => {
             console.log(event);
         });
+    Echo.private(`moderator-deleted-post-channel.${user.id}`)
+        .listen('ModeratorDeletedPost', (event) => {
+            console.log(event);
+        });
 
     return (
         <div className="min-h-screen bg-gray-100">
