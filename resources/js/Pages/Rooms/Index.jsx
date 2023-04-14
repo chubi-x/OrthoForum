@@ -1,31 +1,20 @@
 import Navbar from "@/Layouts/Navbar";
-import {Link} from "@inertiajs/react";
+import RoomCard from "@/Pages/Rooms/Partials/RoomCard";
 
-export default function Index({auth, rooms}){
+export default function Index({ auth, rooms }) {
+    console.log(rooms);
     return (
-        <Navbar
-            user={auth.user}
-            moderatorId={auth?.moderatorId}
-        >
-            <div>
-                <h1>Rooms</h1>
-                {
-                    rooms.map((room) => (
-                        <div key={room.id}>
-                            <h2>
-                                <Link href={route('rooms.show',[room.id])}>
-                                    <u>
-                                        {room.name}
-                                    </u>
-                                </Link>
-                            </h2>
-                            <p>Room description: {room.description}</p>
-                            <p>Room type: {room.type}</p>
-                            <img src={route('rooms.banner-path',[room.banner])} alt={room.name + ' banner'} />
-                        </div>
-                    ))
-                }
+        <Navbar user={auth.user} moderatorId={auth?.moderatorId}>
+            <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-10">
+                <div className=" p-6 text-gray-900">
+                    <h1 className="font-semibold text-xl text-gray-800 leading-tight mb-6">
+                        Rooms
+                    </h1>
+                    {rooms.map((room) => (
+                        <RoomCard room={room} />
+                    ))}
+                </div>
             </div>
         </Navbar>
-    )
+    );
 }
