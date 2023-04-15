@@ -30,7 +30,12 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function (Request $request) {
     $member = Member::find($request->user()->userable_id);
-    $member->rooms;
+
+    foreach($member->rooms as $room){
+        $room->banner = $room->banner_image->path;
+//        $room->_moderator = $room->moderator->member->user->username;
+    }
+
 
     return Inertia::render('Dashboard', [
         'member' => $member
@@ -52,7 +57,7 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::post('/posts/{id}/unlike', [PostController::class, 'unlike'])->name('posts.unlike');
     //    edit post view
     Route::get('/posts/{id}/edit', [PostController::class, 'edit'])->name('posts.edit');
-    //    edit post
+    //    delete post
     Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
 });
 //PUBLIC POSTS ROUTES
