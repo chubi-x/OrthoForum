@@ -44,8 +44,12 @@ class ModeratorController extends Controller
     public function show(string $id)
     {
         //TODO show all their rooms
+        $rooms = Moderator::find($id)->rooms;
+        foreach($rooms as $room){
+            $room->banner = $room->banner_image->path;
+        }
         return Inertia::render("Moderator/ModeratorDashboard",[
-            "rooms"=>Moderator::find($id)->rooms
+            "rooms"=>$rooms
         ]);
     }
 
