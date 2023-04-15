@@ -171,8 +171,12 @@ class PostController extends Controller
         if(!Gate::allows('delete-post', $post) ) {
             abort(403, 'You cannot delete this post');
         }
+        $postInRoom = false;
+        $roomId = null;
         //check if post is in a room
         if($post->room_id != null){
+            $postInRoom = true;
+            $roomId = $post->room_id;
             //check if moderator id and room moderator id are the same
             $room = Room::find($post->room_id);
             if($moderator != null && $room->moderator_id == $moderator->id){
@@ -192,7 +196,13 @@ class PostController extends Controller
             }
         }
 
-        return Redirect::route("posts.indexByUser",["id" => $request->user()->userable_id]);
+        //if post is in a room redirect to room's posts
+        if($postInRoom){
+
+            return Redirect::route("rooms.show", ["id" => $roomId]);
+        }
+
+        else return Redirect::route("posts.indexByUser",["id" => $request->user()->userable_id]);
 
     }
 
