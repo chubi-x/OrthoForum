@@ -1,10 +1,16 @@
 import {Head, Link} from '@inertiajs/react';
+import SecondaryButton from "@/Components/SecondaryButton";
 
 export default function Welcome({ auth}) {
     return (
         <>
             <Head title="Welcome" />
-            <div className="relative sm:flex sm:justify-center sm:items-center min-h-screen">
+            <div
+                style={
+                {"backgroundImage": `url('/public/1.JPG)`, "backgroundSize": "cover"
+                }
+            }
+                className="relative sm:flex sm:justify-center sm:items-center min-h-screen">
                 <div className="sm:fixed sm:top-0 sm:right-0 p-6 text-right">
                     {auth.user ? (
                         <Link
@@ -33,9 +39,14 @@ export default function Welcome({ auth}) {
                 </div>
 
                 <div>
-                    <h1>
+                    <h1 className="mb-5 font-bold">
                         Welcome to OrthoForum!
                     </h1>
+                    <SecondaryButton className="w-full py-4 justify-center" type="button" >
+                        <Link href={route('rooms.index')}>Join a room</Link>
+                    </SecondaryButton>
+
+
                 </div>
             </div>
         </>
