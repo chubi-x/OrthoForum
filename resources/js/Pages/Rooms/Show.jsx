@@ -58,7 +58,7 @@ const showLeaveButton = () => {
                            <h1 className="text-4xl font-bold text-white">{room.name}</h1>
                            <h2 className=" mt-10 text-lg font-semibold text-white">{room.description}</h2>
 
-                           <h2 className=" mt-10 ml-10 text-md self-start  text-white">
+                           <h2 className=" mt-20 ml-10 text-md self-start text-white">
                                Moderator: {moderator}
                            </h2>
                        </section>
