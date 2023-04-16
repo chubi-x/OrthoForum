@@ -92,10 +92,10 @@ export default function Create({auth}) {
                     <PrimaryButton type="button" onClick={ (e)=> showImages(e) } disabled={processing}>
                         Add Image
                     </PrimaryButton>
-                    <div className="inline-flex">
+                    <div className="inline-flex mt-3 gap-5">
                     {
                         countImages.map( (image, index) => (
-                                <div className="w-full inline" key={index}>
+                                <div className="w-full inline " key={index}>
                                     <div className="mb-12">
                                         <input
                                             type="file" name={`post-image-${index}`}

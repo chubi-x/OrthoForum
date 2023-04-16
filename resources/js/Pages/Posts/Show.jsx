@@ -10,6 +10,7 @@ import {useState} from "react";
 import ReactTimeAgo from "react-time-ago";
 import emptyHeart from "../../../images/empty-heart.svg";
 import filledHeart from "../../../images/filled-heart.svg";
+import DangerButton from "@/Components/DangerButton";
 
 export default function Show({auth, post, author, comments, images, canEditPost, canDeletePost}) {
     const  [showComment,setShowComment] = useState(false);
@@ -30,7 +31,9 @@ export default function Show({auth, post, author, comments, images, canEditPost,
     });
 
     const deletePost = (postId) => {
-        deleteMethod(route('posts.destroy', [postId]));
+        deleteMethod(route('posts.destroy', [postId]),{
+            preserveScroll: true,
+        });
     };
     const toggleLikePost = (postId) => {
         if(auth.user){
@@ -38,7 +41,9 @@ export default function Show({auth, post, author, comments, images, canEditPost,
             // if post is liked, send post request to unlike post
             // if post is not liked, send post request to like post
             likePost || postIsLikedByUser ? postMethod( route ('posts.unlike', [postId]) ) :
-                postMethod( route('posts.like', [postId]) );
+                postMethod( route('posts.like', [postId]),{
+                    preserveScroll: true,
+                } );
         }
         else  alert("You need to be logged in to like a post");
 
@@ -46,7 +51,7 @@ export default function Show({auth, post, author, comments, images, canEditPost,
     const postNewComment = (e) => {
         e.preventDefault();
         postComment( route('comments.store'),  {
-            preserveState:false,
+            preserveScroll: true,
         } );
     }
     const showCommentForm = () => {
@@ -74,10 +79,10 @@ export default function Show({auth, post, author, comments, images, canEditPost,
 
             // TODO: notify user if admin or moderator deleted post
             return (
-                <SecondaryButton onClick={() => deletePost(post.id)}
+                <DangerButton onClick={() => deletePost(post.id)}
                                  disabled={processingPost} className='inline'>
                     Delete Post
-                </SecondaryButton>
+                </DangerButton>
             )
         }
     }
@@ -85,19 +90,19 @@ export default function Show({auth, post, author, comments, images, canEditPost,
        return <>
            {bool &&
                <form onSubmit={(e) => postNewComment(e)}>
-                   <InputLabel htmlFor="comment-text" value="New Comment"/>
+                   <InputLabel htmlFor="comment-text" className="dark:text-gray-700 mt-6" value="New Comment"/>
                    <TextInput
                        id="comment-text"
                        name="text"
                        value={commentsData?.text}
-                       className="mt-1 block w-full"
+                       className="mt-1 block bg-white w-9/12 h-20 dark:bg-gray-100 dark:text-black dark:border-gray-500"
                        autoComplete="text"
                        isFocused={true}
                        onChange={(e) => setCommentsData('text', e.target.value)}
                        required
                    />
                    <InputError message={postCommentsErrors?.text} className="mt-2"/>
-                   <SecondaryButton type='submit' disabled={processingPostComment} className='inline'>
+                   <SecondaryButton type='submit' disabled={processingPostComment} className='inline mt-4'>
                        Post Comment
                    </SecondaryButton>
                </form>}
@@ -107,45 +112,61 @@ export default function Show({auth, post, author, comments, images, canEditPost,
 
     return (
         <Navbar user={auth?.user} moderatorId={auth?.moderatorId}>
-            <div>
-                <h1>Post</h1>
-                <p>
-                    <Link href={route("account.show",{id:post.member_id})}>
-                        Author: {author === auth?.user?.username ? "Me" : author }
-                    </Link>
-
-                </p>
-                <div>
-                    <h2> Title:  {post?.title} </h2>
-                    <h2> Body:  {post?.body} </h2>
-                    <p>Likes: {post?.likes.length}</p>
-                    <p>Created: { <ReactTimeAgo date={new Date(post?.created_at)} locale="en-US"/>  }</p>
-                    <p>Last Updated: { <ReactTimeAgo date={ new Date(post?.updated_at)} locale="en-US"/>  }</p>
-                    <p>Room: {post?.room?.name}</p>
-                    <button onClick={()=> toggleLikePost(post.id)}>
-                        <img className="w-6" src={ likePost || postIsLikedByUser ? filledHeart : emptyHeart } alt="like" />
-                    </button>
+            <div className="pt-10 flex flex-col px-24 md:px-48 bg-white">
+                <div className="flex gap-4 justify-end">
                     {showEditButton()}
                     {showDeleteButton()}
+                </div>
+
+                <div className="my-10">
+                    <div className="flex flex-col mb-4">
+                        <h2 className="font-bold text-3xl text-center">{post?.title} </h2>
+                        <div className="self-end space-y-2 flex flex-col items-end w-1/2">
+                            <p className="text-gray-500 w-1/2 text-end text-xs">
+                                By:
+                                <Link className="hover:underline" href={route("account.show",{id:post.member_id})}>
+                                   {" "+ author }
+                                </Link>
+                            </p>
+                            { post?.room_id && <p className="text-gray-500 w-1/2 text-end text-xs">
+                                Posted in:
+                                <Link className="hover:underline" href={route("rooms.show", {id: post?.room_id})}>
+                                    {" " + post?.room?.name}
+                                </Link>
+
+                            </p>}
+                            <p className="text-gray-500 w-1/2 text-end text-xs">Created: { <ReactTimeAgo date={new Date(post?.created_at)} locale="en-US"/>  }</p>
+                            <p className="text-gray-500 w-1/2 text-end text-xs">Updated: { <ReactTimeAgo date={ new Date(post?.updated_at)} locale="en-US"/>  }</p>
+                        </div>
+                    </div>
 
                     {
                         images?.map((image,index) => (
-                            <img key={image.id} loading="lazy" src={route("posts.image-path",[image?.path])} alt={post?.id + 'image '+ index} />
+                            <img key={image.id} className="w-full" loading="lazy" src={route("posts.image-path",[image?.path])} alt={post?.id + 'image '+ index} />
                         ))
                     }
+                    <article className="my-10" >
+                        {post?.body}
+                    </article>
 
-                    <h3> {comments?.length > 0 ? 'Comments' : 'No Comments'}  </h3>
+                    <button className="flex ml-auto"  onClick={()=> toggleLikePost(post.id)}>
+                        <img className="w-6" src={ likePost || postIsLikedByUser ? filledHeart : emptyHeart } alt="like" />
+                    </button>
+                    <p className="text-gray-500 mt-2 text-end text-xs" >{post?.likes.length} {post?.likes.length ===1 ? 'Like' : 'Likes'} </p>
+
+
+                    <div className="justify-between flex mt-10 items-center">
+                        <h3 className="text-2xl font-bold"> {comments?.length > 0 ? 'Comments' : 'No Comments'}  </h3>
+                        <SecondaryButton onClick={showCommentForm}>
+                            New Comment
+                        </SecondaryButton>
+                    </div>
                     {
                         comments?.map((comment) => (
-                            <div key={comment?.id} className='m-10 bg-blue-200'>
-
-                            <Comment comment={comment} moderatorId={post?.room?.moderator_id} auth={auth}/>
-                            </div>
+                            <Comment key={comment?.id} comment={comment} moderatorId={post?.room?.moderator_id} auth={auth}/>
                         ))
                     }
-                    <SecondaryButton onClick={showCommentForm} className='inline'>
-                        New Comment
-                    </SecondaryButton>
+
                     {canPostComment(showComment)}
                     <Transition
                         show={recentlySuccessfulPostComment}
@@ -155,8 +176,6 @@ export default function Show({auth, post, author, comments, images, canEditPost,
                     >
                         <p className="text-sm text-black">Comment posted.</p>
                     </Transition>
-
-
                 </div>
             </div>
         </Navbar>

@@ -151,7 +151,7 @@ class PostController extends Controller
             abort(403, 'You cannot edit this post');
         }
         $post->title = $request->all()["title"];
-        $post->body = $request->all(["body"]);
+        $post->body = $request->all()["body"];
         $post->save();
        $this->uploadPostImages($request, $post);
         Return Redirect::route("posts.show", ["id" => $id]);

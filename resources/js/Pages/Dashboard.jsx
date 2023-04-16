@@ -31,17 +31,31 @@ export default function Dashboard({ auth, flash, member }) {
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="space-x-5">
-                        <PrimaryButton>
-                            <Link
-                                href={route("posts.indexByUser", [
-                                    auth?.user?.userable_id,
-                                ])}
-                            >
-                                Posts
-                            </Link>
-                        </PrimaryButton>
+                    <div className="flex gap-4">
+                        <div className="space-x-5">
+                            <PrimaryButton>
+                                <Link
+                                    href={route("posts.indexByUser", [
+                                        auth?.user?.userable_id,
+                                    ])}
+                                >
+                                    Posts
+                                </Link>
+                            </PrimaryButton>
 
+                        </div>
+                        <div className="space-x-5">
+                            <PrimaryButton>
+                                <Link
+                                    href={route("account.show", [
+                                        auth?.user?.userable_id,
+                                    ])}
+                                >
+                                    All Content
+                                </Link>
+                            </PrimaryButton>
+
+                        </div>
                     </div>
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-10">
                         <div className="p-6 text-gray-900 ">

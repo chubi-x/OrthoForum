@@ -2,6 +2,7 @@ import Navbar from "@/Layouts/Navbar";
 import SecondaryButton from "@/Components/SecondaryButton";
 import {Link, useForm} from "@inertiajs/react";
 import PostCard from "@/Pages/Posts/Partials/PostCard";
+import DangerButton from "@/Components/DangerButton";
 
 export default function Show({auth, room, isModerator, moderator, posts, members}){
     const {post, delete:deleteRoomMethod, processing:processingRoom} = useForm();
@@ -42,10 +43,10 @@ const showJoinButton = () => {
 }
 const showLeaveButton = () => {
     if(!isModerator && isMember  ){
-        return <SecondaryButton onClick={() => leaveRoom(room.id)}
+        return <DangerButton onClick={() => leaveRoom(room.id)}
                     disabled={processingRoom} className='inline'>
             Leave
-        </SecondaryButton>
+        </DangerButton>
     }
 }
 
@@ -62,41 +63,50 @@ const showLeaveButton = () => {
                                Moderator: {moderator}
                            </h2>
                        </section>
-                     <div className="flex flex-col absolute top-2 right-10">
+                     <div className="flex justify-between gap-4 absolute top-2 right-10">
                          {showEditButton()}
                          {showDeleteButton()}
                          {showJoinButton()}
+
+                         { (isMember || isModerator ) &&  <SecondaryButton className='inline'>
+                             <Link href={route('posts.create', {
+                                 room_id: room.id
+                             })}>
+                                 New Post
+                             </Link>
+                         </SecondaryButton>}
+
                          {showLeaveButton()}
+
                      </div>
                </header>
 
-               <h2>{members?.length > 0 ? 'Members' : 'No Members yet'}</h2>
-                <ul>
-                    {members?.map((member) => (
-                        <li key={member.id}>
-                            {/*<Link> /!*route('users.show', [member.id]) *!/*/}
-                                <u>
-                                    {member.user.username}
-                                </u>
-                            {/*</Link>*/}
-                        </li>
-                    ))}
-                </ul>
+               <div className="px-10">
+                   <div className="text-2xl font-semibold mt-10">
+                       {members?.length > 0 ? 'Members' : 'No Members yet'}
+                       <div className="flex gap-6 mt-4">
+                           {members?.map((member) => (
+                               <li key={member.id}>
+                                   <Link href={route('account.show', {id:member.id})}>
+                                       <u>
+                                           {member.user.username}
+                                       </u>
+                                   </Link>
+                               </li>
+                           ))}
+                       </div>
+                   </div>
 
-                <h2> {posts.length > 0 ? 'Posts' : 'No Post yet'}  </h2>
-                <ul>
-                    {posts.map((post) => (
-                        <PostCard key={post.id} post={post}/>
-                    ))}
-                </ul>
+                   <div className="text-2xl font-semibold mt-10">
+                       {posts.length> 0 ? "Posts" : "No Posts"}
+                       <div className="flex gap-6 mt-4">
+                           {posts.map((post) => (
+                               <PostCard post={post} key={post.id}/>
+                           ))}
+                       </div>
+                   </div>
+               </div>
 
-               { (isMember || isModerator ) &&  <SecondaryButton className='inline'>
-                   <Link href={route('posts.create', {
-                       room_id: room.id
-                   })}>
-                       New Post
-                   </Link>
-               </SecondaryButton>}
            </div>
        </Navbar>
     )
