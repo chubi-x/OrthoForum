@@ -25,11 +25,7 @@ export default function Dashboard({ auth, flash, member }) {
         <Navbar
             user={auth?.user}
             moderatorId={auth?.moderatorId}
-            header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Dashboard
-                </h2>
-            }
+
         >
             <Head title="Dashboard" />
 
@@ -46,17 +42,32 @@ export default function Dashboard({ auth, flash, member }) {
                             </Link>
                         </PrimaryButton>
 
-                        {!auth?.moderatorId && (
-                            <PrimaryButton onClick={becomeModerator}>
-                                Become a Moderator
-                            </PrimaryButton>
-                        )}
                     </div>
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-10">
                         <div className="p-6 text-gray-900 ">
-                            <h2 className="font-semibold text-xl text-gray-800 leading-tight mb-6">
-                                Your Rooms
-                            </h2>
+                           <div className="flex justify-between items-center mb-6">
+                               <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                                   Your Rooms
+                               </h2>
+
+                               {!auth?.moderatorId ? (
+                                   <PrimaryButton onClick={becomeModerator}>
+                                       Become a Moderator
+                                   </PrimaryButton>
+                               )
+                                    :
+                               (
+
+                            <PrimaryButton>
+                                <Link href={route('moderator.show', {id: auth?.moderatorId})}>
+                                    Moderator Dashboard
+                                </Link>
+                            </PrimaryButton>
+                               )
+
+                               }
+
+                           </div>
                             <ul className="flex space-x-3">
                                 {member?.rooms.length > 0 ? (
                                     member?.rooms?.map((room) => (

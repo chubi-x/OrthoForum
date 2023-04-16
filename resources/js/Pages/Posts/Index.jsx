@@ -21,14 +21,14 @@ export default function Index({ auth, posts }) {
     return (
         <Navbar user={auth.user} moderatorId={auth?.moderatorId}>
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-10 p-10">
-                <div className="flex justify-between mb-10">
+                <div className="flex items-center justify-between mb-10">
                     {posts.length === 0 ? (
-                        <h1 className="font-semibold text-xl text-gray-800 leading-tight mb-6">
+                        <h1 className="font-semibold text-xl text-gray-800 leading-tight">
                             {" "}
                             {noPostsMessage}{" "}
                         </h1>
                     ) : (
-                        <h1 className="font-semibold text-xl text-gray-800 leading-tight mb-6">
+                        <h1 className="font-semibold text-xl text-gray-800 leading-tight">
                             {" "}
                             {headerMessage}{" "}
                         </h1>

@@ -3,11 +3,12 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import {Link} from '@inertiajs/react';
+import {Link, useForm} from '@inertiajs/react';
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Navbar({ user, moderatorId, header, children }) {
+    const {post,get} = useForm();
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     const [postLikedEmitted, setPostLikedEmitted] = useState({
         postLiked: false,
@@ -43,6 +44,15 @@ export default function Navbar({ user, moderatorId, header, children }) {
         emitNotification(postDeletedEmitted, 'postDeleted', setPostDeletedEmitted, 'message');
     }, [postDeletedEmitted]);
 
+    const becomeModerator = () => {
+        post(route("moderator.store"), {
+            preserveState: false,
+            onSuccess: () => {
+                alert("You are now a moderator!");
+             moderatorId ?  get(route('moderator.show', {id: moderatorId})): null;
+            },
+        });
+    };
     const listenForNotifications = (channel, eventName, setData, data, message) => {
         Echo.private(`${channel}.${user?.id}`)
             .listen(eventName, (event) => {
@@ -59,13 +69,13 @@ export default function Navbar({ user, moderatorId, header, children }) {
         <>
 
             <div className="min-h-screen bg-gray-100">
-                <nav className="bg-white border-b border-gray-100 ">
+                <nav className="bg-orange-200 border-b border-gray-100 py-2 ">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="flex justify-between h-16">
-                            <div className="flex">
-                                <div className="shrink-0 flex items-center">
+                            <div className="flex items-center">
+                                <div className="shrink-0 py-10 flex items-center">
                                     <Link href="/">
-                                        <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
+                                        <ApplicationLogo className="block h-16 w-auto fill-current text-gray-800" />
                                     </Link>
                                 </div>
 
@@ -79,27 +89,6 @@ export default function Navbar({ user, moderatorId, header, children }) {
                             </div>
 
                             <div className="hidden sm:flex sm:items-center sm:ml-6">
-                                {user &&
-                                    <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                        <NavLink>
-                                            <span className="sr-only">Notifications</span>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                className="h-5 w-5"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                                                />
-                                            </svg>
-                                        </NavLink>
-                                    </div>
-                                }
                                 { user ? <div className="ml-3 relative">
                                         <Dropdown>
                                             <Dropdown.Trigger>
@@ -129,11 +118,6 @@ export default function Navbar({ user, moderatorId, header, children }) {
                                             <Dropdown.Content>
                                                 <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
 
-                                                { moderatorId && <Dropdown.Link href={route('moderator.show', {id: moderatorId})}
-                                                                                method="get" as="button">
-                                                    Moderator Dashboard
-                                                </Dropdown.Link>
-                                                }
                                                 <Dropdown.Link href={route('logout')} method="post" as="button">
                                                     Log Out
                                                 </Dropdown.Link>

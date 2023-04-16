@@ -1,6 +1,7 @@
 import Navbar from "@/Layouts/Navbar";
 import SecondaryButton from "@/Components/SecondaryButton";
 import {Link, useForm} from "@inertiajs/react";
+import PostCard from "@/Pages/Posts/Partials/PostCard";
 
 export default function Show({auth, room, isModerator, moderator, posts, members}){
     const {post, delete:deleteRoomMethod, processing:processingRoom} = useForm();
@@ -35,7 +36,7 @@ const showJoinButton = () => {
     if(!isModerator && !isMember ){
         return <SecondaryButton onClick={() => joinRoom(room.id)}
                     disabled={processingRoom} className='inline'>
-            Join Room
+            Join
         </SecondaryButton>
     }
 }
@@ -43,7 +44,7 @@ const showLeaveButton = () => {
     if(!isModerator && isMember  ){
         return <SecondaryButton onClick={() => leaveRoom(room.id)}
                     disabled={processingRoom} className='inline'>
-            Leave Room
+            Leave
         </SecondaryButton>
     }
 }
@@ -51,15 +52,24 @@ const showLeaveButton = () => {
     return (
        <Navbar user={auth?.user} moderatorId={auth?.moderatorId}>
            <div>
-               <h1>Room</h1>
-                <p>Room name: {room.name}</p>
-                <p>Room description: {room.description}</p>
-                <p>Room type: {room.type}</p>
-               <p>Room Moderator: {moderator}  </p>
-               {showEditButton()}
-                {showDeleteButton()}
-                {showJoinButton()}
-                {showLeaveButton()}
+               <header className="w-full h-80 bg-black relative flex overflow-hidden ">
+                   <img className="object-cover opacity-40 h-full w-full"  src={route('rooms.banner-path',[room.banner])} alt="Room Banner"/>
+                       <section className='flex flex-col absolute top-20 w-full text-center '>
+                           <h1 className="text-4xl font-bold text-white">{room.name}</h1>
+                           <h2 className=" mt-10 text-lg font-semibold text-white">{room.description}</h2>
+
+                           <h2 className=" mt-10 ml-10 text-md self-start  text-white">
+                               Moderator: {moderator}
+                           </h2>
+                       </section>
+                     <div className="flex flex-col absolute top-2 right-10">
+                         {showEditButton()}
+                         {showDeleteButton()}
+                         {showJoinButton()}
+                         {showLeaveButton()}
+                     </div>
+               </header>
+
                <h2>{members?.length > 0 ? 'Members' : 'No Members yet'}</h2>
                 <ul>
                     {members?.map((member) => (
@@ -73,22 +83,10 @@ const showLeaveButton = () => {
                     ))}
                 </ul>
 
-                <img className="w-48" src={route('rooms.banner-path',[room.banner])} alt={room.name + ' banner'} />
-
                 <h2> {posts.length > 0 ? 'Posts' : 'No Post yet'}  </h2>
                 <ul>
                     {posts.map((post) => (
-
-                        <li key={post.id}>
-                            <Link href={route('posts.show', [post.id])}>
-                                <u>
-                                {post.title + " "}
-                                </u>
-                            </Link>
-
-                            by : {post.member.user.username}
-
-                        </li>
+                        <PostCard key={post.id} post={post}/>
                     ))}
                 </ul>
 

@@ -9,8 +9,8 @@ export default function ModeratorDashboard({ auth, rooms }) {
         <Navbar user={auth.user} moderatorId={auth?.moderatorId}>
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-10">
                 <div className="p-10 text-gray-900">
-                    <div className="flex justify-between mb-8">
-                        <h2 className="font-semibold text-xl text-gray-800 leading-tight mb-6">
+                    <div className="flex items-center justify-between mb-8">
+                        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
                             Rooms You Moderate
                         </h2>
                             <PrimaryButton type="button">
