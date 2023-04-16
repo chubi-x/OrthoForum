@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Comment;
 use App\Models\Image;
 use App\Models\Member;
+use App\Models\Post;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,14 +15,34 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class ProfileController extends Controller
+class AccountController extends Controller
 {
+    /**
+     * Display the user's profile.
+     */
+    public function show(Request $request, string $id): Response
+    {
+        //get posts by user
+        $posts = Post::all()->where('member_id', $id);
+        foreach ($posts as $post) {
+            $post->likes;
+            $post->images;
+        }
+        $comments = Comment::all()->where('member_id', $id);
+
+
+        return Inertia::render('Account/Show', [
+            'user' => $request->user(),
+            'posts' => array_values($posts->toArray()),
+            'comments' => array_values($comments->toArray()),
+        ]);
+    }
     /**
      * Display the user's profile form.
      */
     public function edit(Request $request): Response
     {
-        return Inertia::render('Profile/Edit', [
+        return Inertia::render('Account/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
         ]);
@@ -39,7 +61,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit');
+        return Redirect::route('account.edit');
     }
 
     /**
@@ -63,7 +85,7 @@ class ProfileController extends Controller
         $user->avatar()->save($image);
         $image->save();
 //        dd($user->avatar);
-        return Redirect::route('profile.edit');
+        return Redirect::route('account.edit');
     }
     /**
      * Delete the user's account.

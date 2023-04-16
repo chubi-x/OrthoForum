@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ModeratorController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
 use App\Models\Member;
 use Illuminate\Http\Request;
@@ -68,8 +68,6 @@ Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
 
 //COMMENTS ROUTES
 Route::middleware(['auth','verified'])->group(function () {
-//    Route::get('/comments/{id}/edit', [CommentController::class, 'edit'])->name('comments.edit');
-//    Route::get('/comments/create', [CommentController::class, 'create'])->name('comments.create');
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::patch('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
     Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
@@ -77,11 +75,14 @@ Route::middleware(['auth','verified'])->group(function () {
 
 // PROFILE ROUTES
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile/update-avatar', [ProfileController::class, 'updateAvatar'])->name('profile.update-avatar');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/account', [AccountController::class, 'edit'])->name('account.edit');
+    Route::post('/account/update-avatar', [AccountController::class, 'updateAvatar'])->name('account.update-avatar');
+    Route::patch('/account', [AccountController::class, 'update'])->name('account.update');
+    Route::delete('/account', [AccountController::class, 'destroy'])->name('account.destroy');
+    Route::get('/account/{id}', [AccountController::class, 'show'])->name('account.show');
 });
+//route to get user posts and comments
+
 
 //MODERATOR ROUTES
 Route::post('/moderator/create', [ModeratorController::class, 'store'])->name('moderator.store')

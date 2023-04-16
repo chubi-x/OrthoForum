@@ -109,7 +109,12 @@ export default function Show({auth, post, author, comments, images, canEditPost,
         <Navbar user={auth?.user} moderatorId={auth?.moderatorId}>
             <div>
                 <h1>Post</h1>
-                <p>Author: {author === auth?.user?.username ? "Me" : author }</p>
+                <p>
+                    <Link href={route("account.show",{id:post.member_id})}>
+                        Author: {author === auth?.user?.username ? "Me" : author }
+                    </Link>
+
+                </p>
                 <div>
                     <h2> Title:  {post?.title} </h2>
                     <h2> Body:  {post?.body} </h2>

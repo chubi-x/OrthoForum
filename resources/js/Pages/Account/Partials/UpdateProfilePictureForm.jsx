@@ -12,7 +12,7 @@ export default function UpdateProfilePictureForm({user}){
 
     const submit = (e) => {
         e.preventDefault();
-        postAvatar(route('profile.update-avatar'), {
+        postAvatar(route('account.update-avatar'), {
             preserveState: false,
         });
     }

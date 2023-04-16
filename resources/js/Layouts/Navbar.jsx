@@ -116,7 +116,7 @@ export default function Navbar({ user, moderatorId, header, children }) {
                                             </Dropdown.Trigger>
 
                                             <Dropdown.Content>
-                                                <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                                                <Dropdown.Link href={route('account.edit')}>Account</Dropdown.Link>
 
                                                 <Dropdown.Link href={route('logout')} method="post" as="button">
                                                     Log Out
@@ -188,7 +188,7 @@ export default function Navbar({ user, moderatorId, header, children }) {
                             </div>
 
                             <div className="mt-3 space-y-1">
-                                <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
+                                <ResponsiveNavLink href={route('account.edit')}>Account</ResponsiveNavLink>
                                 <ResponsiveNavLink method="post" href={route('logout')} as="button">
                                     Log Out
                                 </ResponsiveNavLink>
