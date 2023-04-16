@@ -21,58 +21,40 @@ export default function Navbar({ user, moderatorId, header, children }) {
         postDeleted: false,
         message: '',
     });
-    useEffect(() => {
-        if (postLikedEmitted.postLiked) {
-            toast(postLikedEmitted.message);
-            setPostLikedEmitted({
-                postLiked: false,
-                message: ''
+
+    const emitNotification = (eventStateName, eventStateItemBool, setEventState,stateMessage) => {
+        if (eventStateName[eventStateItemBool]) {
+            toast(eventStateName[stateMessage]);
+            setEventState({
+                [eventStateItemBool]: false,
+                [stateMessage]: ''
             })
         }
+    }
+    useEffect(() => {
+        emitNotification(postLikedEmitted, 'postLiked', setPostLikedEmitted, 'message');
     }, [postLikedEmitted]);
 
     useEffect(() => {
-        if (postCommentedEmitted.postCommented) {
-            toast(postCommentedEmitted.message);
-            setPostCommentedEmitted({
-                postCommented: false,
-                message: ''
-            })
-        }
+        emitNotification(postCommentedEmitted, 'postCommented', setPostCommentedEmitted, 'message');
     }, [postCommentedEmitted]);
 
     useEffect(() => {
-        if (postDeletedEmitted.postDeleted) {
-            toast(postDeletedEmitted.message);
-            setPostDeletedEmitted({
-                postDeleted: false,
-                message: ''
-            })
-        }
+        emitNotification(postDeletedEmitted, 'postDeleted', setPostDeletedEmitted, 'message');
     }, [postDeletedEmitted]);
 
-    Echo.private(`post-liked-channel.${user.id}`)
-        .listen('PostLiked', (event) => {
-            setPostLikedEmitted({
-                postLiked: true,
-                message: event.message,
-            })
-        });
-    Echo.private(`moderator-deleted-post-channel.${user.id}`)
-        .listen('ModeratorDeletedPost', (event) => {
-            setPostDeletedEmitted({
-                postDeleted: true,
-                message: event.message,
-            })
-        });
-    Echo.private(`commented-on-post-channel.${user.id}`)
-        .listen('CommentedOnPost', (event) => {
-            setPostCommentedEmitted({
-                postCommented: true,
-                message: event.message,
-            })
-        });
-
+    const listenForNotifications = (channel, eventName, setData, data, message) => {
+        Echo.private(`${channel}.${user?.id}`)
+            .listen(eventName, (event) => {
+                setData({
+                    [data]:true,
+                    [message]: event.message,
+                });
+            });
+    }
+    listenForNotifications('post-liked-channel', 'PostLiked', setPostLikedEmitted, 'postLiked', 'message');
+    listenForNotifications('moderator-deleted-post-channel', 'ModeratorDeletedPost', setPostDeletedEmitted, 'postDeleted', 'message');
+    listenForNotifications('commented-on-post-channel', 'CommentedOnPost', setPostCommentedEmitted, 'postCommented', 'message');
     return (
         <>
 
