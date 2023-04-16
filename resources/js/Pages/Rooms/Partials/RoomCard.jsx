@@ -1,6 +1,6 @@
 export default function RoomCard({ room }) {
     return (
-        <article className="group w-1/3">
+        <div className="group w-1/3">
             <img
                 alt={room.name + " banner"}
                 src={route("rooms.banner-path", [room.banner])}
@@ -21,6 +21,6 @@ export default function RoomCard({ room }) {
                     {room.description}
                 </p>
             </div>
-        </article>
+        </div>
     );
 }

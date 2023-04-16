@@ -10,9 +10,11 @@ export default function Index({ auth, rooms }) {
                     <h1 className="font-semibold text-xl text-gray-800 leading-tight mb-6">
                         Rooms
                     </h1>
-                    {rooms.map((room) => (
-                        <RoomCard room={room} />
-                    ))}
+                   <div className="flex gap-8">
+                       {rooms.map((room) => (
+                           <RoomCard key={room.id} room={room} />
+                       ))}
+                   </div>
                 </div>
             </div>
         </Navbar>
