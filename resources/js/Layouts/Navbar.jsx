@@ -44,15 +44,6 @@ export default function Navbar({ user, moderatorId, header, children }) {
         emitNotification(postDeletedEmitted, 'postDeleted', setPostDeletedEmitted, 'message');
     }, [postDeletedEmitted]);
 
-    const becomeModerator = () => {
-        post(route("moderator.store"), {
-            preserveState: false,
-            onSuccess: () => {
-                alert("You are now a moderator!");
-             moderatorId ?  get(route('moderator.show', {id: moderatorId})): null;
-            },
-        });
-    };
     const listenForNotifications = (channel, eventName, setData, data, message) => {
         Echo.private(`${channel}.${user?.id}`)
             .listen(eventName, (event) => {
@@ -65,6 +56,8 @@ export default function Navbar({ user, moderatorId, header, children }) {
     listenForNotifications('post-liked-channel', 'PostLiked', setPostLikedEmitted, 'postLiked', 'message');
     listenForNotifications('moderator-deleted-post-channel', 'ModeratorDeletedPost', setPostDeletedEmitted, 'postDeleted', 'message');
     listenForNotifications('commented-on-post-channel', 'CommentedOnPost', setPostCommentedEmitted, 'postCommented', 'message');
+
+
     return (
         <>
 

@@ -50,10 +50,10 @@ class PostController extends Controller
         $post = new Post;
         $post->title = $request->all()["title"];
         $post->body = $request->all()["body"];
-        $post->member()->associate($request->all()["userable_id"]);
+        $post->member()->associate( Member::find($request->all()["userable_id"]) );
         //check if room id is not null and associate it
         if ($request->all()["room_id"] != null){
-            $post->room()->associate($request->all()["room_id"]);
+            $post->room()->associate( Room::find($request->all()["room_id"]) );
         }
         $post->save();
         $this->uploadPostImages($request, $post);
