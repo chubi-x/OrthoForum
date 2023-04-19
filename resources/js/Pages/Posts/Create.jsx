@@ -38,7 +38,7 @@ export default function Create({auth}) {
                     <div>
                         <div className="">
                             <div className="mb-12">
-                                <label className="mb-3 block text-base font-medium text-black">
+                                <label className="mb-3 block text-base font-medium text-gray-500">
                                     Title
                                 </label>
                                 <div className="relative">
@@ -47,7 +47,7 @@ export default function Create({auth}) {
                                            id="title"
                                            value={data.title}
                                            onChange={ (e) => setData('title', e.target.value) }
-                                           required
+                                           // required
                                            autoComplete="title"
                                            className="w-full rounded-md border border-danger py-3 pl-5 pr-12 text-black placeholder-[#929DA7] outline-none transition"/>
                                     {
@@ -68,17 +68,18 @@ export default function Create({auth}) {
                                     }
 
                                 </div>
-                                {errors.title &&  <p className="mt-[10px] text-sm text-danger">{errors.title}</p> }
+                                <InputError className="mt-2" message={errors.title} />
                             </div>
                         </div>
 
-                        <InputLabel htmlFor="body" value="Body" />
+                        <InputLabel className="!text-gray-500 mb-3" htmlFor="body" value="Body" />
                         <Textarea
                             id="body"
                             className=" focus:border-primary active:border-primary w-full rounded-lg border-[1.5px] py-3 px-5 font-medium outline-none transition"
                             value={data.body}
                             onChange={ (e) => setData('body', e.target.value) }
-                            required
+                            // required
+                            placeholder="Body"
                             isFocused
                             autoComplete="body"
                         />

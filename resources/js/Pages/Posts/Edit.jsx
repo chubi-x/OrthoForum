@@ -74,6 +74,7 @@ export default function Edit({auth, post}){
                             value={data.body}
                             onChange={ (e) => setData('body', e.target.value) }
                             required
+                            placeholder="Body"
                             isFocused
                             autoComplete="body"
                         />

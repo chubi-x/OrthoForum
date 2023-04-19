@@ -42,7 +42,7 @@ export default function Comment( {comment, auth,moderatorId } ) {
             <div className="flex-1 my-6 border border-2 w-9/12 flex justify-between rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
                 <div>
                     <strong>
-                        <Link href={route("account.show",{id:comment.member_id})}>
+                        <Link className="hover:underline"  href={route("account.show",{id:comment.member_id})}>
                             {comment?.author}
                         </Link>
                     </strong>    <span className="text-xs text-gray-400">{ ".."+  date}</span>

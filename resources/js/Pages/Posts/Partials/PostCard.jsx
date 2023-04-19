@@ -38,7 +38,7 @@ export default function PostCard({ post }) {
 
             <div className="hidden sm:block sm:basis-56">
                 <img
-                    alt="Post Image"
+                    alt="The featured image of a post"
                     src={postImage}
                     className="aspect-square h-full w-full object-cover"
                 />

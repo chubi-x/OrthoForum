@@ -2,7 +2,6 @@ import Navbar from "@/Layouts/Navbar";
 import RoomCard from "@/Pages/Rooms/Partials/RoomCard";
 
 export default function Index({ auth, rooms }) {
-    console.log(rooms);
     return (
         <Navbar user={auth.user} moderatorId={auth?.moderatorId}>
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-10">
