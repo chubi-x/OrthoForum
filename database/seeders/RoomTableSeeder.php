@@ -1,12 +1,10 @@
 <?php
 
 namespace Database\Seeders;
-use Illuminate\Database\Seeder;
-use App\Models\Room;
-use App\Models\Moderator;
-use App\Models\Member;
 use App\Models\Image;
-use Illuminate\Database\Eloquent\Factories\Sequence;
+use App\Models\Moderator;
+use App\Models\Room;
+use Illuminate\Database\Seeder;
 
 class RoomTableSeeder extends Seeder
 {
@@ -19,8 +17,7 @@ class RoomTableSeeder extends Seeder
         $moderators = Moderator::all()->random(4);
         foreach ($moderators as $moderator){
             Image::factory()->for(
-                Room::factory()->for($moderator)
-                    ->has(Member::factory()->count(3))->create(),
+                Room::factory()->for($moderator),
                 "imageable"
             )->create(
                 ["type"=>"BANNER"]

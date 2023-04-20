@@ -7,6 +7,7 @@ use App\Models\Comment;
 use App\Models\Image;
 use App\Models\Member;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,7 +33,7 @@ class AccountController extends Controller
 
 
         return Inertia::render('Account/Show', [
-            'user' => $request->user(),
+            'user' => User::find($id),
             'posts' => array_values($posts->toArray()),
             'comments' => array_values($comments->toArray()),
         ]);

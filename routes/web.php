@@ -79,8 +79,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/account/update-avatar', [AccountController::class, 'updateAvatar'])->name('account.update-avatar');
     Route::patch('/account', [AccountController::class, 'update'])->name('account.update');
     Route::delete('/account', [AccountController::class, 'destroy'])->name('account.destroy');
-    Route::get('/account/{id}', [AccountController::class, 'show'])->name('account.show');
 });
+Route::get('/account/{id}', [AccountController::class, 'show'])->name('account.show');
+
 //route to get user posts and comments
 
 

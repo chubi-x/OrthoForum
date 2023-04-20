@@ -2,15 +2,15 @@ import Navbar from "@/Layouts/Navbar";
 import PostCard from "@/Pages/Posts/Partials/PostCard";
 import {Link} from "@inertiajs/react";
 
-export default function Show({auth,posts,comments}){
-    console.log(posts)
+export default function Show({auth, user, posts,comments}){
+    // console.log(aut)
     return (
         <Navbar user={auth.user} moderatorId={auth.moderatorId}>
             <div className="py-12 px-32">
                 <div className="overflow-hidden flex relative h-40 bg-black font-bold text-3xl text-center  rounded-md">
                     <img className=" w-full h-full object-cover opacity-40" alt="banner photo" src="https://images.unsplash.com/photo-1566228015668-4c45dbc4e2f5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80"/>
                     <p className="absolute top-14 text-center text-white w-full ">
-                        {auth.user.username + "'s Content"}
+                        {user.username + "'s Content"}
                     </p>
                 </div>
                 <div className="text-2xl font-semibold mt-10">

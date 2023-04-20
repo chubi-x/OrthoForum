@@ -23,7 +23,7 @@ class RoomController extends Controller
         foreach ($rooms as $room){
             $room->banner = $room->banner_image->path;
             //add moderator username
-            $room->_moderator = $room->moderator->member->user->username;
+            $room->moderator->member->user;
         }
         return Inertia::render("Rooms/Index", ["rooms" => $rooms]);
     }
@@ -96,13 +96,18 @@ class RoomController extends Controller
 
         //add posts
         $posts = $room->posts;
-        foreach ($posts as $post){
-            $post->images;
-            $post->member->user->makeHidden(['email_verified_at','created_at','updated_at','password','remember_token','userable_type']);
+        if(!empty($posts)){
+            foreach ($posts as $post){
+                $post->images;
+                $post->member->user;
+            }
         }
         $members = $room->members;
-        foreach ($members as $member){
-           $member->user->makeHidden(['email_verified_at','created_at','updated_at','password','remember_token','userable_type']);
+        if(!empty($members)){
+            foreach ($members as $member){
+                $member->user;
+            }
+
         }
         return Inertia::render("Rooms/Show",["room" => $room,
             "isModerator" => $isModerator,

@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Comment;
-use App\Models\Post;
 use App\Models\Member;
+use App\Models\Post;
+use Illuminate\Database\Seeder;
 
 class CommentTableSeeder extends Seeder
 {
@@ -15,8 +14,8 @@ class CommentTableSeeder extends Seeder
      */
     public function run(): void
     {
-        // add 3 comments to 3 posts
-        $posts = Post::all()->random(3);
+        // add 3 comments to all posts
+        $posts = Post::all();
         $members = Member::all()->random(3);
 
         foreach($posts as $post){

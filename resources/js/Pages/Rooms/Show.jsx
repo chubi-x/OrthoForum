@@ -86,10 +86,10 @@ const showLeaveButton = () => {
                        {members?.length > 0 ? 'Members' : 'No Members yet'}
                        <div className="flex gap-6 mt-4">
                            {members?.map((member) => (
-                               <li key={member.id}>
-                                   <Link href={route('account.show', {id:member.id})}>
+                               <li key={member?.id}>
+                                   <Link href={route('account.show', {id:member?.id})}>
                                        <u>
-                                           {member.user.username}
+                                           {member?.user?.username}
                                        </u>
                                    </Link>
                                </li>
@@ -101,7 +101,7 @@ const showLeaveButton = () => {
                        {posts.length> 0 ? "Posts" : "No Posts"}
                        <div className="flex gap-6 mt-4">
                            {posts.map((post) => (
-                               <PostCard post={post} key={post.id}/>
+                               <PostCard post={post} key={post?.id}/>
                            ))}
                        </div>
                    </div>
