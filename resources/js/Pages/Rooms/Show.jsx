@@ -6,7 +6,7 @@ import DangerButton from "@/Components/DangerButton";
 
 export default function Show({auth, room, isModerator, moderator, posts, members}){
     const {post, delete:deleteRoomMethod, processing:processingRoom} = useForm();
-    const isMember =(auth.user && members?.find((member) => member.id === auth.user.id));
+    const isMember =(auth.user && members.some((member) => member.id === auth.user.userable_id) );
     const deleteRoom = (roomId) => {
         deleteRoomMethod(route('rooms.destroy', [roomId]));
     };
