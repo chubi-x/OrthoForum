@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Like;
 use App\Models\Member;
 use App\Models\Post;
 use App\Models\Room;
@@ -14,14 +15,19 @@ class PostTableSeeder extends Seeder
      */
     public function run(): void
     {
-        //create 3 posts
-        $rooms = Room::all()->random(3);
+        //create 20 posts per room
+        $rooms = Room::all();
         $members = Member::all()->random(3);
 
         foreach($rooms as $room){
             foreach($members as $member){
                 Post::factory(20)->for($member)->for($room)->create();
             }
+        }
+        //seed likes
+        $posts = Post::all();
+        foreach($posts as $post){
+            Like::factory(50)->for( Member::all()->random() )->for( $post )->create();
         }
 
     }
