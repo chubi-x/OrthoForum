@@ -22,7 +22,7 @@ export default function PostCard({ post }) {
             ? route("posts.image-path", [post.images[0].path])
             : "https://via.placeholder.com/150";
     return (
-        <article className="flex bg-blue-100 transition hover:shadow-xl w-1/3">
+        <article className="flex bg-blue-100 transition hover:shadow-xl w-1/4">
             <div className="rotate-180 p-2 [writing-mode:_vertical-lr]">
                 <time
                     dateTime="2022-10-10"

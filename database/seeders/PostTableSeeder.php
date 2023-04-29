@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
+use App\Models\Member;
 use App\Models\Post;
 use App\Models\Room;
-use App\Models\Member;
+use Illuminate\Database\Seeder;
 
 class PostTableSeeder extends Seeder
 {
@@ -21,7 +20,7 @@ class PostTableSeeder extends Seeder
 
         foreach($rooms as $room){
             foreach($members as $member){
-                Post::factory()->for($member)->for($room)->create();
+                Post::factory(20)->for($member)->for($room)->create();
             }
         }
 

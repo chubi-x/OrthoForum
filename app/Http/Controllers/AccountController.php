@@ -33,7 +33,7 @@ class AccountController extends Controller
 
 
         return Inertia::render('Account/Show', [
-            'user' => User::find($id),
+            'user' => User::find( Member::find($id)->user->id ),
             'posts' => array_values($posts->toArray()),
             'comments' => array_values($comments->toArray()),
         ]);
