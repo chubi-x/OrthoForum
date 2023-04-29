@@ -163,7 +163,7 @@ export default function Show({auth, post, author, comments, images, canEditPost,
                     </div>
                     {
                         comments?.map((comment) => (
-                            <Comment key={comment?.id} comment={comment} moderatorId={post?.room?.moderator_id} auth={auth}/>
+                            <Comment key={comment?.id} comment={comment} canDelete = {canDeletePost} moderatorId={post?.room?.moderator_id} auth={auth}/>
                         ))
                     }
 

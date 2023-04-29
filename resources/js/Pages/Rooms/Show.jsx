@@ -4,7 +4,7 @@ import {Link, useForm} from "@inertiajs/react";
 import PostCard from "@/Pages/Posts/Partials/PostCard";
 import DangerButton from "@/Components/DangerButton";
 
-export default function Show({auth, room, isModerator, moderator, posts, members}){
+export default function Show({auth, room, canModify, moderator, posts, members}){
     const {post, delete:deleteRoomMethod, processing:processingRoom} = useForm();
     const isMember =(auth.user && members.some((member) => member.id === auth.user.userable_id) );
     const deleteRoom = (roomId) => {
@@ -17,7 +17,7 @@ export default function Show({auth, room, isModerator, moderator, posts, members
         post( route('rooms.leave', [roomId]) );
     }
     const showEditButton = () => {
-        if(isModerator){
+        if(canModify){
             return <SecondaryButton disabled={processingRoom} className='inline'>
                 <Link href={route('rooms.edit', [room?.id])}>
                     Edit Room Details
@@ -26,7 +26,7 @@ export default function Show({auth, room, isModerator, moderator, posts, members
         }
     }
     const showDeleteButton = () => {
-        if(isModerator){
+        if(canModify){
            return <SecondaryButton onClick={() => deleteRoom(room.id)}
                          disabled={processingRoom} className='inline'>
                 Delete Room
@@ -34,7 +34,7 @@ export default function Show({auth, room, isModerator, moderator, posts, members
         }
     }
 const showJoinButton = () => {
-    if(!isModerator && !isMember ){
+    if(!canModify && !isMember ){
         return <SecondaryButton onClick={() => joinRoom(room.id)}
                     disabled={processingRoom} className='inline'>
             Join
@@ -42,7 +42,7 @@ const showJoinButton = () => {
     }
 }
 const showLeaveButton = () => {
-    if(!isModerator && isMember  ){
+    if(!canModify && isMember  ){
         return <DangerButton onClick={() => leaveRoom(room.id)}
                     disabled={processingRoom} className='inline'>
             Leave
@@ -68,7 +68,7 @@ const showLeaveButton = () => {
                          {showDeleteButton()}
                          {showJoinButton()}
 
-                         { (isMember || isModerator ) &&  <SecondaryButton className='inline'>
+                         { (isMember || canModify ) &&  <SecondaryButton className='inline'>
                              <Link href={route('posts.create', {
                                  room_id: room.id
                              })}>
@@ -87,7 +87,7 @@ const showLeaveButton = () => {
                        <div className="flex gap-6 mt-4">
                            {members?.map((member) => (
                                <li key={member?.id}>
-                                   <Link href={route('account.show', {id:member?.id})}>
+                                   <Link href={route('account.show', { id: member?.user?.id})}>
                                        <u>
                                            {member?.user?.username}
                                        </u>
@@ -99,9 +99,9 @@ const showLeaveButton = () => {
 
                    <div className="text-2xl font-semibold mt-10">
                        {posts.length> 0 ? "Posts" : "No Posts"}
-                       <div className="flex gap-6 mt-4">
+                       <div className="flex gap-4 mt-4 flex-wrap">
                            {posts.map((post) => (
-                               <PostCard post={post} key={post?.id}/>
+                               <PostCard post={post} key={post?.id} author = {post?.member?.user}/>
                            ))}
                        </div>
                    </div>

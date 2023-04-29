@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckIsModerator
+class CanModifyRooms
 {
     /**
      * Handle an incoming request.
@@ -18,11 +18,8 @@ class CheckIsModerator
     public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
-        if(!$user->userable_type == "App\Models\Member") {
-            return Redirect::route("dashboard");
-        }
-        $isModerator = Moderator::where("member_id", $user->userable_id)->exists();
-        if (! $isModerator) {
+        $canModifyRooms = Moderator::where("member_id", $user->userable_id)->exists() || $user->userable_type == "App\Models\Admin";
+        if (! $canModifyRooms) {
             return Redirect::route("dashboard")->with("moderator-error", "You are not a moderator!");
         }
         return $next($request);

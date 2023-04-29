@@ -1,4 +1,6 @@
-export default function PostCard({ post }) {
+import {Link} from "@inertiajs/react";
+
+export default function PostCard({ post,author }) {
     const months = [
         "January",
         "February",
@@ -22,7 +24,7 @@ export default function PostCard({ post }) {
             ? route("posts.image-path", [post.images[0].path])
             : "https://via.placeholder.com/150";
     return (
-        <article className="flex bg-blue-100 transition hover:shadow-xl w-1/4">
+        <article className="flex bg-blue-100 transition hover:shadow-xl w-1/4 grow">
             <div className="rotate-180 p-2 [writing-mode:_vertical-lr]">
                 <time
                     dateTime="2022-10-10"
@@ -46,11 +48,13 @@ export default function PostCard({ post }) {
 
             <div className="flex flex-1 flex-col justify-between">
                 <div className="border-l border-gray-900/10 p-4 sm:border-l-transparent sm:p-6">
-                    <a href="#">
                         <h3 className="font-bold uppercase text-gray-900">
                             {post.title}
+
+                            { author && <p className="lowercase text-sm mt-4 text-orange-800">
+                                By: <Link className="hover:underline" href={route("account.show",[author.id])}>  {author.username}  </Link>
+                            </p>}
                         </h3>
-                    </a>
 
                     <p className="mt-2 text-sm leading-relaxed text-gray-700 line-clamp-3">
                         {post.body}

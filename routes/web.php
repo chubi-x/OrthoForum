@@ -29,19 +29,22 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function (Request $request) {
+    if($request->user()->userable_type === 'App\Models\Admin'){
+        return Inertia::render('Admin/AdminDashboard');
+    }
     $member = Member::find($request->user()->userable_id);
 
     foreach($member->rooms as $room){
         $room->banner = $room->banner_image->path;
-//        $room->_moderator = $room->moderator->member->user->username;
     }
 
 
     return Inertia::render('Dashboard', [
         'member' => $member
-
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get("/users", [AccountController::class, 'index'])->name("users.index")->middleware(['auth', 'verified']);
 
 // PRIVATE POSTS ROUTES
 Route::middleware(['auth','verified'])->group(function () {
@@ -78,7 +81,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/account', [AccountController::class, 'edit'])->name('account.edit');
     Route::post('/account/update-avatar', [AccountController::class, 'updateAvatar'])->name('account.update-avatar');
     Route::patch('/account', [AccountController::class, 'update'])->name('account.update');
-    Route::delete('/account', [AccountController::class, 'destroy'])->name('account.destroy');
+    Route::delete('/account/destroy/{id}', [AccountController::class, 'destroy'])->name('account.destroy');
 });
 Route::get('/account/{id}', [AccountController::class, 'show'])->name('account.show');
 
@@ -98,7 +101,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/rooms/{id}/join', [RoomController::class, 'join'])->name('rooms.join');
     Route::post('/rooms/{id}/leave', [RoomController::class, 'leave'])->name('rooms.leave');
 });
-Route::middleware(['auth', 'isModerator'])->group(function () {
+Route::middleware(['auth', 'canModifyRooms'])->group(function () {
     Route::get('/rooms/create', [RoomController::class, 'create'])->name('rooms.create');
     Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
     Route::get('/rooms/{id}/edit', [RoomController::class, 'edit'])->name('rooms.edit');

@@ -12,6 +12,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -19,23 +20,44 @@ use Inertia\Response;
 class AccountController extends Controller
 {
     /**
+     * Display a listing of the resource.
+     */
+    public function index(): Response
+    {
+        Gate::authorize('admin');
+        $users = User::all()->where("userable_type", "!=", "App\Models\Admin");
+
+        //add post count
+        foreach ($users as $user) {
+            $memberId = Member::find( $user->userable_id )->id;
+            $user->postCount = Post::all()->where('member_id', $memberId)->count();
+            $user->commentCount = Comment::all()->where('member_id', $memberId)->count();
+        }
+        return Inertia::render('Admin/ShowUsers', [
+            'users' => array_values($users->toArray()),
+        ]);
+    }
+    /**
      * Display the user's profile.
      */
     public function show(Request $request, string $id): Response
     {
         //get posts by user
-        $posts = Post::all()->where('member_id', $id);
+        $user = User::find($id);
+        $memberId = Member::find( $user->userable_id )->id;
+        $posts = Post::all()->where('member_id', $memberId  );
         foreach ($posts as $post) {
             $post->likes;
             $post->images;
         }
-        $comments = Comment::all()->where('member_id', $id);
+        $comments = Comment::all()->where('member_id', $memberId);
 
 
         return Inertia::render('Account/Show', [
-            'user' => User::find( Member::find($id)->user->id ),
+            'user' => $user,
             'posts' => array_values($posts->toArray()),
             'comments' => array_values($comments->toArray()),
+            'isAdmin'=> $request->user()?->userable_type == "App\Models\Admin",
         ]);
     }
     /**
@@ -91,22 +113,31 @@ class AccountController extends Controller
     /**
      * Delete the user's account.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request, string $id): RedirectResponse
     {
-        $request->validate([
-            'password' => ['required', 'current_password'],
-        ]);
-
-        $user = $request->user();
-        Auth::logout();
-
+        $user = User::find($id);
+        $requester = $request->user();
+        //protect with delete member gate
+        if ( Gate::denies('delete-user', $requester) ) {
+            return Redirect::route('account.edit');
+        }
+        // if admin, redirect to admin dashboard
+        if (!$requester->userable_type == "App\Models\Admin") {
+            $request->validate([
+                'password' => ['required', 'current_password'],
+            ]);
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
         //delete user and corresponding member
         Member::find($user->userable_id)->delete();
         $user->delete();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        if ($requester->userable_type == "App\Models\Admin") {
+            return Redirect::route('dashboard');
+        }
+        return Redirect::route('/');
 
-        return Redirect::to('/');
     }
 }

@@ -84,12 +84,12 @@ class RoomController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
         $room = Room::findorFail($id);
         $room->banner = $room->banner_image->path;
         // check if user is the moderator of the room
-        $isModerator = Gate::allows('edit-room', $room);
+        $canModify = Gate::allows('delete-room', $room);
         //add moderator username
 //        dd($room->_moderator);
         $moderator = $room->moderator->member->user->username;
@@ -110,7 +110,7 @@ class RoomController extends Controller
 
         }
         return Inertia::render("Rooms/Show",["room" => $room,
-            "isModerator" => $isModerator,
+            "canModify" => $canModify,
             "moderator" => $moderator,
             "posts" => $posts,
             "members" => $members
@@ -167,7 +167,7 @@ class RoomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
         $room = Room::findorFail($id);
         $moderatorId = $room->moderator->id;
@@ -183,6 +183,10 @@ class RoomController extends Controller
                     $image->delete();
                 }
             }
+        }
+        //return to dashboard if admin
+        if($request->user()->userable_type == "App\Models\Admin"){
+            return Redirect::route("dashboard");
         }
         return Redirect::route("moderator.show",["id" => $moderatorId]);
     }

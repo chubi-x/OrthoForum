@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("name")->unique();
             $table->string("description");
             $table->enum("type", ["PRIVATE", "PUBLIC"]);
-            $table->foreignId("moderator_id")->constrained()->restrictOnDelete()->cascadeOnUpdate();
+            $table->foreignId("moderator_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }

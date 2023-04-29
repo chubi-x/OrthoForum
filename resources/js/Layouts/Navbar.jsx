@@ -3,12 +3,11 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import {Link, useForm} from '@inertiajs/react';
+import {Link} from '@inertiajs/react';
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Navbar({ user, moderatorId, header, children }) {
-    const {post,get} = useForm();
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     const [postLikedEmitted, setPostLikedEmitted] = useState({
         postLiked: false,
@@ -24,7 +23,7 @@ export default function Navbar({ user, moderatorId, header, children }) {
     });
 
     const emitNotification = (eventStateName, eventStateItemBool, setEventState,stateMessage) => {
-        if (eventStateName[eventStateItemBool]) {
+        if (user && eventStateName[eventStateItemBool]) {
             toast(eventStateName[stateMessage]);
             setEventState({
                 [eventStateItemBool]: false,
@@ -45,13 +44,15 @@ export default function Navbar({ user, moderatorId, header, children }) {
     }, [postDeletedEmitted]);
 
     const listenForNotifications = (channel, eventName, setData, data, message) => {
-        Echo.private(`${channel}.${user?.id}`)
-            .listen(eventName, (event) => {
-                setData({
-                    [data]:true,
-                    [message]: event.message,
+        if(user){
+            Echo.private(`${channel}.${user?.id}`)
+                .listen(eventName, (event) => {
+                    setData({
+                        [data]:true,
+                        [message]: event.message,
+                    });
                 });
-            });
+        }
     }
     listenForNotifications('post-liked-channel', 'PostLiked', setPostLikedEmitted, 'postLiked', 'message');
     listenForNotifications('moderator-deleted-post-channel', 'ModeratorDeletedPost', setPostDeletedEmitted, 'postDeleted', 'message');

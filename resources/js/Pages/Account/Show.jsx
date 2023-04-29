@@ -1,8 +1,9 @@
 import Navbar from "@/Layouts/Navbar";
 import PostCard from "@/Pages/Posts/Partials/PostCard";
-import {Link} from "@inertiajs/react";
+import {Link, useForm} from "@inertiajs/react";
 import {useState} from "react";
 import ReactPaginate from "react-paginate";
+import DangerButton from "@/Components/DangerButton";
 
 function Posts({currentItems}){
     return <div className="flex flex-wrap gap-6 mt-4">
@@ -11,13 +12,17 @@ function Posts({currentItems}){
         ))}
     </div>
 }
-export default function Show({auth, user, posts,comments}){
+export default function Show({auth, user, posts,comments, isAdmin}){
+    const {delete:deleteMethod} = useForm();
     const [itemOffset,setItemOffset] = useState(0);
     const endOffset = itemOffset + 5; //5 items per page
     const currentItems = posts.slice(itemOffset,endOffset);
     const pageCount = Math.ceil(posts.length / 5);
     const handlePageClick = ({ selected: selectedPage }) => {
-        setItemOffset((selectedPage * 5) & posts.length ) ;
+        setItemOffset((selectedPage * 5) ) ;
+    }
+    const deleteUser = () => {
+        deleteMethod(route("account.destroy", [user.id]));
     }
     return (
         <Navbar user={auth.user} moderatorId={auth.moderatorId}>
@@ -27,6 +32,7 @@ export default function Show({auth, user, posts,comments}){
                     <p className="absolute top-14 text-center text-white w-full ">
                         {user.username + "'s Content"}
                     </p>
+                    {isAdmin &&   <DangerButton className="absolute top-14 right-14" onClick={()=>{if(confirm("Are you sure you want to delete this user?")){deleteUser()}}}>Delete User</DangerButton>}
                 </div>
                 <div className="text-2xl font-semibold mt-10">
                     {posts.length> 0 ? "Posts" : "No Posts"}
@@ -57,10 +63,10 @@ export default function Show({auth, user, posts,comments}){
                     <h1 className="text-2xl font-semibold ">
                         {comments.length> 0 ? "Comments" : "No Comments"}
                     </h1>
-                    <div className="flex gap-6 mt-4">
+                    <div className="flex flex-wrap gap-6 mt-4">
                         {comments.map((comment) => (
                             <div key={comment.id}>
-                                <h1 className="flex gap-4 hover:underline">
+                                <h1 className="flex gap-4 w-20 overflow-hidden text-ellipsis hover:underline">
                                     <Link href={route("posts.show",{id:comment.post_id})}>
                                         {comment.text}
                                     </Link>

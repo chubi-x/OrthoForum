@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ModeratorDeletedPost;
 use App\Events\PostLiked;
+use App\Models\Comment;
 use App\Models\Image;
 use App\Models\Like;
 use App\Models\Member;
@@ -186,7 +187,8 @@ class PostController extends Controller
                 ModeratorDeletedPost::dispatch($moderatorUser, $room, $postOwner, $post);
             }
         }
-        $post->comments()->delete();
+        $comments = Comment::where("post_id",$post->id)->get(["id"]);
+        Comment::destroy($comments->toArray());
         $post->delete();
         $images = Image::all()->where("imageable_id", $id)->where("type", "POST");
         if($images->count() > 0){

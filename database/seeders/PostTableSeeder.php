@@ -21,6 +21,8 @@ class PostTableSeeder extends Seeder
 
         foreach($rooms as $room){
             foreach($members as $member){
+                //associate member and room
+                $member->rooms()->attach($room);
                 Post::factory(20)->for($member)->for($room)->create();
             }
         }
