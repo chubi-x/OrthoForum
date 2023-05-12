@@ -25,27 +25,29 @@ export default function Edit({auth, room}){
     }
     return (
        <Navbar user={auth.user} moderatorId={auth?.moderatorId}>
-           <div>
-               <h1>Edit Room</h1>
+           <div className="w-1/2 mx-auto px-4 mt-10">
+               <h1 className="mx-auto mt-10 flex justify-center font-bold text-xl text-gray-800 leading-tight mb-6">Edit Room</h1>
 
                <form onSubmit={(e)=>submit(e)}>
 
-                   <InputLabel htmlFor="name" value="Edit Name" />
+                   <label className="mb-3 block text-base font-medium text-black">
+                       Name
+                   </label>
                    <TextInput
                        id="name"
                        name="name"
                        value={data.name}
-                       className="mt-1 block w-full"
-                       autoComplete="text"
+                       className="w-full rounded-md border border-danger py-3 pl-5 pr-12 text-black placeholder-[#929DA7] outline-none transition"
+                    autoComplete="text"
                        isFocused={true}
                        onChange={(e) => setData('name', e.target.value)}
                    />
                    <InputError message={errors.name} className="mt-2" />
 
-                   <InputLabel htmlFor="description" value="Edit Description" />
+                   <InputLabel htmlFor="description" value="Description" />
                    <Textarea
                        id="description"
-                       className="mt-1 block w-full"
+                       className=" focus:border-primary active:border-primary w-full rounded-lg border-[1.5px] py-3 px-5 font-medium outline-none transition"
                        value={data.description}
                        onChange={ (e) => setData('description', e.target.value) }
                        required

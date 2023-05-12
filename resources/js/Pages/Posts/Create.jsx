@@ -1,23 +1,20 @@
 import InputLabel from "@/Components/InputLabel";
 import InputError from "@/Components/InputError";
 import {useForm} from "@inertiajs/react";
-import PrimaryButton from "@/Components/PrimaryButton";
 import Textarea from "@/Components/Textarea";
 import Navbar from "@/Layouts/Navbar";
-import {useEffect, useState} from "react";
-import {handleImageChange} from "@/Utils/ImageUploadHelper";
+import {useEffect} from "react";
 import SecondaryButton from "@/Components/SecondaryButton";
 
 export default function Create({auth}) {
     const user = auth?.user;
     const { data, setData, post, errors, processing } = useForm({
         title: '',
-        images: [],
+        image:"",
         body: '',
         userable_id: '',
         room_id: new URLSearchParams(location.search).get('room_id'),
     });
-    const [countImages, setCountImages] = useState([]);
 
     useEffect(() => {
         setData('userable_id', user.userable_id);
@@ -27,9 +24,7 @@ export default function Create({auth}) {
         e.preventDefault();
         post(route('posts.store'));
     };
-    const showImages = () => {
-        countImages.length <4 ? setCountImages(prev=>( [...prev, 0 ] ) ) : alert("You can't add more than 4 images");
-    }
+
     return (
         <Navbar user={user} moderatorId={auth?.moderatorId}>
             <div className='w-1/2 mx-auto px-4 mt-10'>
@@ -90,26 +85,18 @@ export default function Create({auth}) {
                     <div className="w-full mx-auto md:w-1/2 lg:w-1/3">
                         <SecondaryButton className="w-full py-4 justify-center" type="submit" disabled={processing}>Post</SecondaryButton>
                     </div>
-                    <PrimaryButton type="button" onClick={ (e)=> showImages(e) } disabled={processing}>
-                        Add Image
-                    </PrimaryButton>
+
                     <div className="inline-flex mt-3 gap-5">
-                    {
-                        countImages.map( (image, index) => (
-                                <div className="w-full inline " key={index}>
-                                    <div className="mb-12">
-                                        <input
-                                            type="file" name={`post-image-${index}`}
-                                            onChange={ (e)=> handleImageChange(e,data, setData) }
-                                            className="border-form-stroke text-body-color placeholder-body-color focus:border-primary active:border-primary file:border-form-stroke file:text-body-color file:hover:bg-primary w-full cursor-pointer rounded-lg border-[1.5px] font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:bg-[#F5F7FD] file:py-3 file:px-5 file:hover:bg-opacity-10 disabled:cursor-default disabled:bg-[#F5F7FD]"
-                                        />
-                                        <InputError message={errors[`images.${[index]}`]}  className="mt-2" />
-                                    </div>
-                                </div>
-
-                        ))
-
-                    }
+                        <div className="w-full inline " >
+                            <div className="mb-12">
+                                <input
+                                    type="file" name={`post-image`}
+                                    onChange={ (e)=> setData( 'image', e.target.files[0] ) }
+                                    className="border-form-stroke text-body-color placeholder-body-color focus:border-primary active:border-primary file:border-form-stroke file:text-body-color file:hover:bg-primary w-full cursor-pointer rounded-lg border-[1.5px] font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:bg-[#F5F7FD] file:py-3 file:px-5 file:hover:bg-opacity-10 disabled:cursor-default disabled:bg-[#F5F7FD]"
+                                />
+                                <InputError message={errors.image}  className="mt-2" />
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -6,8 +6,8 @@ import {useState} from "react";
 import ReactPaginate from "react-paginate";
 
 
-function Posts({ currentItems}){
-    return <div className=" mx-auto space-x-4 flex">
+function Posts({ currentItems }){
+    return <div className=" mx-auto space-x-4 flex flex-wrap gap-4">
         { currentItems && currentItems.map((post) => (
             <PostCard key={post.id} post={post} />
         ))}
@@ -15,12 +15,12 @@ function Posts({ currentItems}){
 }
 export default function Index({ auth, posts }) {
     const [itemOffset,setItemOffset] = useState(0);
-    const endOffset = itemOffset + 5; //5 items per page
-    const currentItems = posts.slice(itemOffset,endOffset);
-    const pageCount = Math.ceil(posts.length / 5);
+    const endOffset = itemOffset + 10; //5 items per page
+    const currentItems = posts.slice(itemOffset, endOffset);
+    const pageCount = Math.ceil(posts.length / 10);
 
     const handlePageClick = ({ selected: selectedPage }) => {
-        setItemOffset((selectedPage * 5) & posts.length ) ;
+        setItemOffset((selectedPage * 10) % posts.length ) ;
     }
 
     const { get, processing } = useForm();

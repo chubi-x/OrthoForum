@@ -186,7 +186,7 @@ class RoomController extends Controller
         }
         //return to dashboard if admin
         if($request->user()->userable_type == "App\Models\Admin"){
-            return Redirect::route("dashboard");
+            return Redirect::route("rooms.index");
         }
         return Redirect::route("moderator.show",["id" => $moderatorId]);
     }

@@ -23,13 +23,13 @@ class PostTableSeeder extends Seeder
             foreach($members as $member){
                 //associate member and room
                 $member->rooms()->attach($room);
-                Post::factory(20)->for($member)->for($room)->create();
+                Post::factory(5)->for($member)->for($room)->create();
             }
         }
         //seed likes
         $posts = Post::all();
         foreach($posts as $post){
-            Like::factory(50)->for( Member::all()->random() )->for( $post )->create();
+            Like::factory(20)->for( Member::all()->random() )->for( $post )->create();
         }
 
     }

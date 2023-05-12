@@ -24,7 +24,7 @@ class PostController extends Controller
         $posts = Post::where("member_id", $id)->get();
 //        dd($posts);
         foreach ($posts as $post){
-            $post->images;
+            $post->image;
             $post->room;
             $post->likes;
         }
@@ -59,13 +59,8 @@ class PostController extends Controller
         $post->save();
         $this->uploadPostImages($request, $post);
 
-        //if room is null, redirect to user's posts
-        if ($request->all()["room_id"] == null){
-            return Redirect::route("posts.indexByUser",[ "id" => $request->user()->userable_id]);
-        }
-        //else redirect to room's posts
-        return Redirect::route("rooms.show", ["id" => $request->all()["room_id"]]);
-
+        //redirect to post
+        return Redirect::route("posts.show", ["id" => $post->id]);
     }
 
     /**
@@ -76,7 +71,7 @@ class PostController extends Controller
         $post = Post::findorFail($id);
         $author = User::find(Member::find($post->member_id)->user->id)->username;
         $comments = $post->comments;
-        $images = $post->images;
+        $post->image;
         $post->room;
         $post->likes;
 //       show author name of each comment
@@ -90,7 +85,6 @@ class PostController extends Controller
                 "post" => $post,
                 "author"=> $author,
                 "comments" => $comments,
-                "images" => $images,
                 "canEditPost" => $canEditPost,
                 "canDeletePost" => $canDeletePost
             ]);
@@ -215,23 +209,19 @@ class PostController extends Controller
      * @return void
      */
     private function uploadPostImages(Request $request, Post $post): void {
-        if (!empty($request->all()["images"])) {
-            //validate images
+        if (!empty($request->all()["image"])) {
            $request->validate([
-               'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+               'image' => 'mimes:jpeg,png,jpg,gif,svg|max:2048'
            ]);
-            $imageModels = [];
-            foreach ($request->all()["images"] as $index => $image) {
-                $imageModel = new Image();
-                $image->storeAs('posts', 'post-' . $post->id . '-image-' . $index . '.' . $image->extension(), 'public');
-                $imageModel->path = 'post-' . $post->id . '-image-' . $index . '.' . $image->extension();
-                $imageModel->imageable()->associate($post);
-                $imageModel->type = "POST";
-                $imageModel->save();
-                $imageModels[] = $imageModel;
-            }
+            $image = $request->file('image');
+            $imageModel = new Image();
+            $image->storeAs('posts', 'post-' . $post->id . '-image' . '.' . $image->extension(), 'public');
+            $imageModel->path = 'post-' . $post->id . '-image' . '.' . $image->extension();
+            $imageModel->imageable()->associate($post);
+            $imageModel->type = "POST";
+            $imageModel->save();
 
-            $post->images()->saveMany($imageModels);
+            $post->image()->save($imageModel);
             $post->save();
         }
     }

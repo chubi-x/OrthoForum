@@ -20,8 +20,8 @@ export default function PostCard({ post,author }) {
     const month = new Date(post.created_at).getMonth();
 
     const postImage =
-        post.images.length > 0
-            ? route("posts.image-path", [post.images[0].path])
+        post.image && post.image.path
+            ? route("posts.image-path", [post.image.path])
             : "https://via.placeholder.com/150";
     return (
         <article className="flex bg-blue-100 transition hover:shadow-xl w-1/4 grow">

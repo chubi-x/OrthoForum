@@ -141,9 +141,8 @@ export default function Show({auth, post, author, comments, images, canEditPost,
                     </div>
 
                     {
-                        images?.map((image,index) => (
-                            <img key={image.id} className="w-full" loading="lazy" src={route("posts.image-path",[image?.path])} alt={post?.id + 'image '+ index} />
-                        ))
+                        post.image &&
+                        <img className="w-full" loading="lazy" src={route("posts.image-path",[post.image?.path])} alt={post?.title + 'image '} />
                     }
                     <article className="my-10" >
                         {post?.body}
@@ -163,7 +162,7 @@ export default function Show({auth, post, author, comments, images, canEditPost,
                     </div>
                     {
                         comments?.map((comment) => (
-                            <Comment key={comment?.id} comment={comment} canDelete = {canDeletePost} moderatorId={post?.room?.moderator_id} auth={auth}/>
+                            <Comment key={comment?.id} comment={comment} canDeletePost = {canDeletePost} auth={auth}/>
                         ))
                     }
 

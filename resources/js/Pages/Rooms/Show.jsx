@@ -87,7 +87,7 @@ const showLeaveButton = () => {
                        <div className="flex gap-6 mt-4">
                            {members?.map((member) => (
                                <li key={member?.id}>
-                                   <Link href={route('account.show', { id: member?.user?.id})}>
+                                   <Link href={route('account.show', { id: member.id})}>
                                        <u>
                                            {member?.user?.username}
                                        </u>

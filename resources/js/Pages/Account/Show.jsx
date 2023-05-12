@@ -19,7 +19,7 @@ export default function Show({auth, user, posts,comments, isAdmin}){
     const currentItems = posts.slice(itemOffset,endOffset);
     const pageCount = Math.ceil(posts.length / 5);
     const handlePageClick = ({ selected: selectedPage }) => {
-        setItemOffset((selectedPage * 5) ) ;
+        setItemOffset((selectedPage * 5) % posts.length ) ;
     }
     const deleteUser = () => {
         deleteMethod(route("account.destroy", [user.id]));

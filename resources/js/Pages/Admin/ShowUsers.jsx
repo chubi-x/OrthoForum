@@ -24,7 +24,7 @@ export default function ShowUsers({auth,users}){
                           Comments:  {user.commentCount}
                         </p>
                         <PrimaryButton>
-                            <Link className={'text-white'} href={route('account.show',[user.id])}>
+                            <Link className={'text-white'} href={route('account.show',[user.userable_id])}>
                                 See Content
                             </Link>
                         </PrimaryButton>

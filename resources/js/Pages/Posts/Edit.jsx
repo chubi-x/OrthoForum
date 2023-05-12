@@ -2,7 +2,6 @@ import Navbar from "@/Layouts/Navbar";
 import {useForm} from "@inertiajs/react";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
-import {useState} from "react";
 import Textarea from "@/Components/Textarea";
 import SecondaryButton from "@/Components/SecondaryButton";
 
@@ -11,7 +10,6 @@ export default function Edit({auth, post}){
             title: post.title,
          body: post.body,
      });
-    const [countImages, setCountImages] = useState([]);
      const submit = (e) => {
         e.preventDefault();
         postEdit(route('posts.update', [post.id]), {

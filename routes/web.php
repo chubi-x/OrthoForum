@@ -92,7 +92,7 @@ Route::get('/account/{id}', [AccountController::class, 'show'])->name('account.s
 Route::post('/moderator/create', [ModeratorController::class, 'store'])->name('moderator.store')
     ->middleware('auth','verified');
 
-Route::middleware(['auth','verified','isModerator'])->group(function () {
+Route::middleware(['auth','verified','canModifyRooms'])->group(function () {
     Route::get('/moderator/dashboard/{id}', [ModeratorController::class, 'show'] )-> name('moderator.show');
 });
 

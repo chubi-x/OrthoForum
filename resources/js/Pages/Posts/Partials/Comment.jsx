@@ -1,7 +1,7 @@
 import {Link, useForm} from "@inertiajs/react";
 import DangerButton from "@/Components/DangerButton";
 
-export default function Comment( {comment, auth, moderatorId, canDelete } ) {
+export default function Comment( {comment, auth, canDeletePost} ) {
 
     const {
         delete:deleteCommentMethod,
@@ -15,9 +15,10 @@ export default function Comment( {comment, auth, moderatorId, canDelete } ) {
             preserveScroll: true,
         });
     }
+    const canDelete = auth?.user?.id === comment?.member_id ;
 
     const canDeleteComment = (comment) => {
-        if(canDelete){
+        if(canDelete || canDeletePost){
             //TODO:  notify user if admin or moderator deleted their comment
             return (
                 <>

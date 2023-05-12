@@ -43,8 +43,7 @@ class AccountController extends Controller
     public function show(Request $request, string $id): Response
     {
         //get posts by user
-        $user = User::find($id);
-        $memberId = Member::find( $user->userable_id )->id;
+        $memberId = Member::find( $id )->id;
         $posts = Post::all()->where('member_id', $memberId  );
         foreach ($posts as $post) {
             $post->likes;
@@ -52,7 +51,7 @@ class AccountController extends Controller
         }
         $comments = Comment::all()->where('member_id', $memberId);
 
-
+        $user = User::where('userable_id', $id)->first();
         return Inertia::render('Account/Show', [
             'user' => $user,
             'posts' => array_values($posts->toArray()),
@@ -135,7 +134,7 @@ class AccountController extends Controller
         $user->delete();
 
         if ($requester->userable_type == "App\Models\Admin") {
-            return Redirect::route('dashboard');
+            return Redirect::route('users.index');
         }
         return Redirect::route('/');
 
